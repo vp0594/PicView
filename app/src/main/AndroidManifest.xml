@@ -18,6 +18,9 @@
         android:theme="@style/Theme.PicView"
         tools:targetApi="33">
         <activity
+            android:name=".FullScreenImage"
+            android:exported="false" />
+        <activity
             android:name=".RequestPermission"
             android:exported="false" />
         <activity
