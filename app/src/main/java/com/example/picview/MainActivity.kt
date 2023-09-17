@@ -2,25 +2,28 @@ package com.example.picview
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.FragmentManager
 import androidx.viewpager2.widget.ViewPager2
+import com.example.picview.databinding.ActivityMainBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var homePageTabLayout: TabLayout
-    private lateinit var homePageViewPager: ViewPager2
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
 
-        homePageTabLayout = findViewById(R.id.homePageTabLayout)
-        homePageViewPager = findViewById(R.id.homePageViewPage)
 
-        homePageViewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
-        TabLayoutMediator(homePageTabLayout, homePageViewPager) { tab, position ->
+        setContentView(binding.root)
+
+        setUpTabLayout()
+    }
+
+    private fun setUpTabLayout() {
+        binding.homePageViewPage.adapter = TabLayoutAdapter(supportFragmentManager, lifecycle)
+        TabLayoutMediator(binding.homePageTabLayout, binding.homePageViewPage) { tab, position ->
             when (position) {
                 0 -> tab.text = "All Photos"
                 1 -> tab.text = "Albums"
