@@ -2,6 +2,7 @@ package com.example.picview
 
 import android.content.ContentUris
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
@@ -10,9 +11,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.picview.databinding.FragmentAlbumsBinding
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 
 class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
@@ -22,6 +20,9 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
     private val context: Context? = activity?.applicationContext
     private val albumsData = ArrayList<AlbumData>()
 
+    companion object {
+        lateinit var imageList: ArrayList<ImageData>
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,12 +32,10 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
         _binding = FragmentAlbumsBinding.inflate(inflater, container, false)
 
         fetchAlbumsData()
-        val albumsAdapter = AlbumsAdapter(requireContext(), albumsData)
+        val albumsAdapter = AlbumsAdapter(requireContext(), albumsData, this)
 
         binding.albumsRecyclerView.layoutManager = GridLayoutManager(context, 2)
         binding.albumsRecyclerView.adapter = albumsAdapter
-
-
 
         return binding.root
     }
@@ -80,55 +79,60 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
         }
     }
 
-    private fun fetchImagesList(folderName: String): ArrayList<ImageData> {
-        val tempImageList = ArrayList<ImageData>()
-
-        val selection = "${MediaStore.Images.Media.BUCKET_DISPLAY_NAME} = ?"
-
-        val projection = arrayOf(MediaStore.Images.Media._ID, MediaStore.Images.Media.DATE_ADDED)
-
-        val sortBy = "${MediaStore.Images.Media.DATE_ADDED} DESC"
-
-        val cursor = context?.contentResolver?.query(
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-            projection,
-            selection,
-            null,
-            sortBy
-        )
-
-        if (cursor != null) {
-            if (cursor.moveToNext()) {
-
-                val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
-                val dateTakenColumn =
-                    cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_ADDED)
-
-                val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
-
-                do {
-                    val id = cursor.getLong(idColumn)
-                    val dateTaken = cursor.getLong(dateTakenColumn)
-                    val imageUri =
-                        ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
-
-                    val formattedDate = dateFormat.format(Date(dateTaken))
-
-                    tempImageList.add(ImageData(imageUri, formattedDate))
-                } while (cursor.moveToNext())
-            }
-        }
-
-        cursor?.close()
-        return tempImageList
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
-    override fun onAlbumClick(folderName: String, imagePath: String) {
-
+    override fun onAlbumClick(folderName: String) {
+        imageList = getImageList(folderName)
+        val intent = Intent(requireContext(), AlbumImages::class.java)
+        startActivity(intent)
     }
+
+    private fun getImageList(folderName: String): ArrayList<ImageData> {
+        val imageList = ArrayList<ImageData>()
+
+        val projection = arrayOf(
+            MediaStore.Images.Media._ID,
+            MediaStore.Images.Media.DATE_TAKEN
+        )
+
+        val selection =
+            "${MediaStore.Images.Media.BUCKET_DISPLAY_NAME} = ?"
+
+        val selectionArgs = arrayOf(folderName)
+
+        val sortOrder = "${MediaStore.Images.Media.DATE_TAKEN} DESC"
+
+        val cursor = requireContext().contentResolver.query(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            projection,
+            selection,
+            selectionArgs,
+            sortOrder
+        )
+
+        if (cursor != null) {
+            if (cursor.moveToNext()) {
+                val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
+                val dateTakenColumn =
+                    cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_TAKEN)
+
+                do {
+                    val id = cursor.getLong(idColumn)
+                    val dateTaken = cursor.getLong(dateTakenColumn)
+                    val imageUri =
+                        ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
+                    imageList.add(ImageData(imageUri, dateTaken.toString()))
+                } while (cursor.moveToNext())
+            }
+            cursor.close()
+        }
+
+        return imageList
+    }
+
+
 }
