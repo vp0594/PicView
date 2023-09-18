@@ -15,7 +15,8 @@ class AlbumImages : AppCompatActivity() {
         binding = ActivityAlbumImagesBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val allPhotoAdapter = AllPhotoAdapter(applicationContext, AlbumsFragment.imageList)
+        val allPhotoAdapter =
+            AllPhotoAdapter(applicationContext, AlbumsFragment.imageList, "Albums")
         binding.albumsImagesRecylerView.layoutManager = GridLayoutManager(applicationContext, 4)
         binding.albumsImagesRecylerView.adapter = allPhotoAdapter
     }

@@ -37,7 +37,7 @@ class AllPhotoFragment : Fragment() {
 
         binding.allPhotoRecyclerView.setHasFixedSize(true)
         binding.allPhotoRecyclerView.layoutManager = GridLayoutManager(context, 4)
-        allPhotoAdapter = AllPhotoAdapter(context, imageList)
+        allPhotoAdapter = AllPhotoAdapter(context, imageList,"AllPhotos")
         binding.allPhotoRecyclerView.adapter = allPhotoAdapter
 
         return binding.root

@@ -10,27 +10,21 @@ class FullScreenImage : AppCompatActivity() {
     private lateinit var binding: ActivityFullScreenImageBinding
     private lateinit var fullScreenImageAdapter: FullScreenImageAdapter
     private var currentPosition = 0
-    private var allPhotoList = AllPhotoFragment.imageList
+    private var allPhotoList = ArrayList<ImageData>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFullScreenImageBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-//        window.setFlags(
-//            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-//            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-//        )
-
-
-        fullScreenImageAdapter =
-            FullScreenImageAdapter(applicationContext, allPhotoList)
+        allPhotoList = if (intent.getStringExtra("from") == "AllPhotos") {
+            AllPhotoFragment.imageList
+        } else {
+            AlbumsFragment.imageList
+        }
+        fullScreenImageAdapter = FullScreenImageAdapter(applicationContext, allPhotoList)
         binding.fullScreenViewPager.adapter = fullScreenImageAdapter
-        currentPosition = intent.getIntExtra("CurrentPosition", 1)
-        binding.fullScreenViewPager.setCurrentItem(currentPosition, false)
 
-
-        binding.fullScreenViewPager.adapter = fullScreenImageAdapter
         val currentPosition = intent.getIntExtra("CurrentPosition", 1)
         binding.fullScreenViewPager.setCurrentItem(currentPosition, false)
 

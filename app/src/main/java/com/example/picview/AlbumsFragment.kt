@@ -8,6 +8,7 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.picview.databinding.FragmentAlbumsBinding
@@ -22,6 +23,7 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
 
     companion object {
         lateinit var imageList: ArrayList<ImageData>
+        var s = false
     }
 
     override fun onCreateView(
@@ -85,6 +87,7 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
         _binding = null
     }
 
+
     override fun onAlbumClick(folderName: String) {
         imageList = getImageList(folderName)
         val intent = Intent(requireContext(), AlbumImages::class.java)
@@ -93,7 +96,6 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
 
     private fun getImageList(folderName: String): ArrayList<ImageData> {
         val imageList = ArrayList<ImageData>()
-
         val projection = arrayOf(
             MediaStore.Images.Media._ID,
             MediaStore.Images.Media.DATE_TAKEN
