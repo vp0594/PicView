@@ -35,10 +35,10 @@ class AllPhotoFragment : Fragment() {
 
         imageList = getImageList()
 
-        binding.allPhotoRecylerView.setHasFixedSize(true)
-        binding.allPhotoRecylerView.layoutManager = GridLayoutManager(context, 4)
+        binding.allPhotoRecyclerView.setHasFixedSize(true)
+        binding.allPhotoRecyclerView.layoutManager = GridLayoutManager(context, 4)
         allPhotoAdapter = AllPhotoAdapter(context, imageList)
-        binding.allPhotoRecylerView.adapter = allPhotoAdapter
+        binding.allPhotoRecyclerView.adapter = allPhotoAdapter
 
         return binding.root
 

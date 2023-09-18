@@ -1,9 +1,8 @@
 <resources>
     <string name="app_name">PicView</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="share">share</string>
     <string name="favorites">favorites</string>
     <string name="delete">delete</string>
     <string name="sidesShow">SidesShow</string>
+    <string name="albumsRaw">albumsCover</string>
 </resources>
