@@ -17,10 +17,12 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/actionView"
+        android:name="com.example.picview.ActionFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout="@layout/action_view" />
+        tools:layout="@layout/fragment_action" />
 </androidx.constraintlayout.widget.ConstraintLayout>

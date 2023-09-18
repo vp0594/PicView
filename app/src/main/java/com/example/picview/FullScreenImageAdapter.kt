@@ -1,11 +1,14 @@
 package com.example.picview
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.view.GestureDetector
 import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.picview.databinding.ActivityFullScreenImageBinding
 import com.example.picview.databinding.ImageSliderBinding
 
 class FullScreenImageAdapter(
@@ -25,7 +28,30 @@ class FullScreenImageAdapter(
         return imageList.size
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         Glide.with(context).load(imageList[position].imageUri).into(holder.image)
+        holder.image.setOnClickListener {
+            if (ActionFragment.binding.root.visibility == View.VISIBLE) {
+                ActionFragment.binding.root.visibility = View.GONE
+            } else {
+                ActionFragment.binding.root.visibility = View.VISIBLE
+            }
+        }
+        holder.image.isClickable = false
+
+        val gestureDetector = GestureDetector(context, GestureTap(holder.image))
+        holder.image.setOnTouchListener { _, event ->
+            gestureDetector.onTouchEvent(event)
+
+            false
+        }
+    }
+
+    class GestureTap(private var view: View) : GestureDetector.SimpleOnGestureListener() {
+        override fun onSingleTapUp(e: MotionEvent): Boolean {
+            view.performClick()
+            return true
+        }
     }
 }

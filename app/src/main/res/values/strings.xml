@@ -5,4 +5,5 @@
     <string name="share">share</string>
     <string name="favorites">favorites</string>
     <string name="delete">delete</string>
+    <string name="sidesShow">SidesShow</string>
 </resources>
