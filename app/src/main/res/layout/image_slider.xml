@@ -17,5 +17,4 @@
         app:zoomage_translatable="true"
         app:zoomage_zoomable="true" />
 
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

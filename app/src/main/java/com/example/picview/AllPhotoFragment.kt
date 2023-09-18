@@ -10,6 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.picview.databinding.FragmentAllPhotoBinding
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class AllPhotoFragment : Fragment() {
 
@@ -65,13 +68,15 @@ class AllPhotoFragment : Fragment() {
                 val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
                 val dateTakeColumn =
                     cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_TAKEN)
+                val dateFormat = SimpleDateFormat("MMMM dd, yyyy \n HH:mm", Locale.getDefault())
 
                 do {
                     val id = cursor.getLong(idColumn)
                     val dateTaken = cursor.getLong(dateTakeColumn)
                     val imageUri =
                         ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
-                    tempImageList.add(ImageData(imageUri, dateTaken))
+                    val formattedDate:String = dateFormat.format(Date(dateTaken))
+                    tempImageList.add(ImageData(imageUri, formattedDate))
                 } while (cursor.moveToNext())
             }
         }

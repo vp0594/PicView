@@ -1,8 +1,9 @@
 package com.example.picview
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager2.widget.ViewPager2
 import com.example.picview.databinding.ActivityFullScreenImageBinding
 
 class FullScreenImage : AppCompatActivity() {
@@ -21,9 +22,23 @@ class FullScreenImage : AppCompatActivity() {
 
         fullImageList = AllPhotoFragment.imageList
 
-        fullScreenImageAdapter = FullScreenImageAdapter(applicationContext, fullImageList)
         binding.fullScreenViewPager.adapter = fullScreenImageAdapter
-        binding.fullScreenViewPager.setCurrentItem(intent.getIntExtra("CurrentPosition",1),false)
+        val currentPosition = intent.getIntExtra("CurrentPosition", 1)
+        binding.fullScreenViewPager.setCurrentItem(currentPosition, false)
+
+        binding.fullScreenViewPager.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                BottomActionFragment.binding.shareButton.setOnClickListener {
+                    Toast.makeText(applicationContext, "yes", Toast.LENGTH_SHORT).show()
+                }
+                //   TopActionFragment.binding.dateTextView.text = fullImageList[position].dateTake
+            }
+        })
+
 
     }
+
+
 }
