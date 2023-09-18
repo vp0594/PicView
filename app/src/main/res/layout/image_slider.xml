@@ -18,5 +18,4 @@
 
         app:zoomage_zoomable="true" />
 
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

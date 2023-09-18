@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.picview.databinding.FragmentTopActionBinding
 import com.example.picview.databinding.ImageSliderBinding
 
 class FullScreenImageAdapter(
@@ -31,12 +32,19 @@ class FullScreenImageAdapter(
     @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         Glide.with(context).load(imageList[position].imageUri).into(holder.image)
+
         holder.image.setOnClickListener {
-            if (ActionFragment.binding.root.visibility == View.VISIBLE) {
-                ActionFragment.binding.root.visibility = View.GONE
+            if (BottomActionFragment.binding.root.visibility == View.VISIBLE) {
+                BottomActionFragment.binding.root.visibility = View.GONE
+                TopActionFragment.binding.root.visibility = View.GONE
             } else {
-                ActionFragment.binding.root.visibility = View.VISIBLE
+                BottomActionFragment.binding.root.visibility = View.VISIBLE
+                TopActionFragment.binding.root.visibility = View.VISIBLE
             }
+        }
+
+        holder.image.setOnClickListener {
+
         }
         holder.image.isClickable = false
 
