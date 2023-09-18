@@ -10,8 +10,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.picview.databinding.FragmentAllPhotoBinding
+import java.io.File
 import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.Locale
 
 class AllPhotoFragment : Fragment() {
@@ -29,7 +29,7 @@ class AllPhotoFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         context = activity?.applicationContext!!
         _binding = FragmentAllPhotoBinding.inflate(inflater, container, false)
 
@@ -50,7 +50,7 @@ class AllPhotoFragment : Fragment() {
 
         val selection = MediaStore.Images.Media._ID
 
-        val projection = arrayOf(MediaStore.Images.Media._ID, MediaStore.Images.Media.DATE_ADDED)
+        val projection = arrayOf(MediaStore.Images.Media._ID, MediaStore.Images.Media.DATE_TAKEN, MediaStore.Images.Media.DATA)
 
         val sortBy = "${MediaStore.Images.Media.DATE_ADDED} DESC"
 
@@ -66,17 +66,22 @@ class AllPhotoFragment : Fragment() {
             if (cursor.moveToNext()) {
 
                 val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
-                val dateTakenColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_ADDED)
+                val dateTakenColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_TAKEN)
 
                 val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
 
                 do {
+                    val path = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA))
                     val id = cursor.getLong(idColumn)
                     val dateTaken = cursor.getLong(dateTakenColumn)
                     val imageUri =
                         ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
 
-                    val formattedDate = dateFormat.format(Date(dateTaken))
+                    val formattedDate = if (dateTaken == 0L) {
+                        dateFormat.format(getDateModified(path))
+                    } else {
+                        dateFormat.format(dateTaken)
+                    }
 
                     tempImageList.add(ImageData(imageUri, formattedDate))
                 } while (cursor.moveToNext())
@@ -90,5 +95,9 @@ class AllPhotoFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun getDateModified(path: String): Long {
+        return File(path).lastModified()
     }
 }
