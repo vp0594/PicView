@@ -6,15 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".FullScreenImage">
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/topActionView"
-        android:name="com.example.picview.BottomActionFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout="@layout/fragment_top_action" />
+
+
+
+
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/fullScreenViewPager"
@@ -26,6 +21,19 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.fragment.app.FragmentContainerView
+
+        android:id="@+id/TopActionView"
+        android:name="com.example.picview.TopActionFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/fullScreenViewPager"
+        tools:layout="@layout/fragment_top_action" />
+
+    <androidx.fragment.app.FragmentContainerView
+
         android:id="@+id/BottomActionView"
         android:name="com.example.picview.BottomActionFragment"
         android:layout_width="match_parent"

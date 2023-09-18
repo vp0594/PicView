@@ -19,10 +19,9 @@ class TopActionFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         val view = inflater.inflate(R.layout.fragment_top_action, container, false)
         binding = FragmentTopActionBinding.bind(view)
         return binding.root
     }
-
-
 }

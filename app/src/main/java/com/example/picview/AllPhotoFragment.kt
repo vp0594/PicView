@@ -4,10 +4,10 @@ import android.content.ContentUris
 import android.content.Context
 import android.os.Bundle
 import android.provider.MediaStore
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.picview.databinding.FragmentAllPhotoBinding
 import java.text.SimpleDateFormat
@@ -50,7 +50,7 @@ class AllPhotoFragment : Fragment() {
 
         val selection = MediaStore.Images.Media._ID
 
-        val projection = arrayOf(MediaStore.Images.Media._ID, MediaStore.Images.Media.DATE_TAKEN)
+        val projection = arrayOf(MediaStore.Images.Media._ID, MediaStore.Images.Media.DATE_ADDED)
 
         val sortBy = "${MediaStore.Images.Media.DATE_ADDED} DESC"
 
@@ -66,16 +66,18 @@ class AllPhotoFragment : Fragment() {
             if (cursor.moveToNext()) {
 
                 val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
-                val dateTakeColumn =
-                    cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_TAKEN)
-                val dateFormat = SimpleDateFormat("MMMM dd, yyyy \n HH:mm", Locale.getDefault())
+                val dateTakenColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_ADDED)
+
+                val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
 
                 do {
                     val id = cursor.getLong(idColumn)
-                    val dateTaken = cursor.getLong(dateTakeColumn)
+                    val dateTaken = cursor.getLong(dateTakenColumn)
                     val imageUri =
                         ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
-                    val formattedDate:String = dateFormat.format(Date(dateTaken))
+
+                    val formattedDate = dateFormat.format(Date(dateTaken))
+
                     tempImageList.add(ImageData(imageUri, formattedDate))
                 } while (cursor.moveToNext())
             }
