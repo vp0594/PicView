@@ -1,6 +1,7 @@
 package com.example.picview
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.example.picview.databinding.ActivityFullScreenImageBinding
@@ -22,10 +23,11 @@ class FullScreenImage : AppCompatActivity() {
         } else {
             AlbumsFragment.imageList
         }
+
         fullScreenImageAdapter = FullScreenImageAdapter(applicationContext, allPhotoList)
         binding.fullScreenViewPager.adapter = fullScreenImageAdapter
+        currentPosition = intent.getIntExtra("CurrentPosition", 1)
 
-        val currentPosition = intent.getIntExtra("CurrentPosition", 1)
         binding.fullScreenViewPager.setCurrentItem(currentPosition, false)
 
 
@@ -35,17 +37,9 @@ class FullScreenImage : AppCompatActivity() {
                 super.onPageSelected(position)
 
                 TopActionFragment.binding.dateTextView.text =
-                    allPhotoList[currentPosition].dateTake
+                    allPhotoList[position].dateTake
             }
         })
 
     }
-
-    override fun onStart() {
-        super.onStart()
-        TopActionFragment.binding.dateTextView.text =
-            allPhotoList[currentPosition].dateTake
-    }
-
-
 }
