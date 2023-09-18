@@ -15,6 +15,7 @@
         app:zoomage_minScale="0.6"
         app:zoomage_restrictBounds="false"
         app:zoomage_translatable="true"
+
         app:zoomage_zoomable="true" />
 
 
