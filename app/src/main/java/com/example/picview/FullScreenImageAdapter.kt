@@ -15,7 +15,8 @@ import com.example.picview.databinding.ImageSliderBinding
 class FullScreenImageAdapter(
     private val context: Context,
     private val imageList: ArrayList<ImageData>,
-    private val shareButtonClickListener: ShareButtonClickListener
+    private val shareButtonClickListener: ShareButtonClickListener,
+    private val sideShowClickListener: SideShowButtonClickListener
 
 ) :
     RecyclerView.Adapter<FullScreenImageAdapter.ViewHolder>() {
@@ -26,6 +27,11 @@ class FullScreenImageAdapter(
 
     interface ShareButtonClickListener {
         fun onShareButtonClick(imageUri: Uri)
+    }
+
+    interface SideShowButtonClickListener {
+        fun onSideShowButtonClick()
+        fun offSideShowButtonClick()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -41,6 +47,15 @@ class FullScreenImageAdapter(
         Glide.with(context).load(imageList[position].imageUri).into(holder.image)
 
         holder.image.setOnClickListener {
+
+            if (FullScreenImage.slideShow) {
+                sideShowClickListener.offSideShowButtonClick()
+                FullScreenImage.slideShow = false
+                BottomActionFragment.binding.root.visibility = View.VISIBLE
+                TopActionFragment.binding.root.visibility = View.VISIBLE
+                return@setOnClickListener
+            }
+
             if (BottomActionFragment.binding.root.visibility == View.VISIBLE) {
                 BottomActionFragment.binding.root.visibility = View.GONE
                 TopActionFragment.binding.root.visibility = View.GONE
@@ -50,9 +65,14 @@ class FullScreenImageAdapter(
             }
         }
 
-
         BottomActionFragment.binding.shareButton.setOnClickListener {
             shareButtonClickListener.onShareButtonClick(imageList[position].imageUri)
+        }
+        BottomActionFragment.binding.sideShowButton.setOnClickListener {
+            FullScreenImage.slideShow = true
+            BottomActionFragment.binding.root.visibility = View.GONE
+            TopActionFragment.binding.root.visibility = View.GONE
+            sideShowClickListener.onSideShowButtonClick()
         }
 
 
