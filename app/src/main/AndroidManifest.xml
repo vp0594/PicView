@@ -22,7 +22,14 @@
             android:exported="false" />
         <activity
             android:name=".FullScreenImage"
-            android:exported="false" />
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="image/*" android:scheme="content"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".RequestPermission"
             android:exported="false" />

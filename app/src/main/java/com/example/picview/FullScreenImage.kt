@@ -1,11 +1,13 @@
 package com.example.picview
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.example.picview.databinding.ActivityFullScreenImageBinding
+import kotlin.system.exitProcess
 
 class FullScreenImage : AppCompatActivity(),
     FullScreenImageAdapter.SideShowButtonClickListener {
@@ -20,9 +22,18 @@ class FullScreenImage : AppCompatActivity(),
 
     companion object {
         var slideShow = false
+        var external = false
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        val contentUri = if(intent.data?.scheme.contentEquals("content")) {
+            external = true
+            intent.data!!
+        } else {
+            Uri.parse("")
+        }
+
         super.onCreate(savedInstanceState)
         binding = ActivityFullScreenImageBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -30,18 +41,22 @@ class FullScreenImage : AppCompatActivity(),
 
         dataBase = FavouritesDataBase(this)
 
-        allPhotoList = if (intent.getStringExtra("from") == "AllPhotos") {
-            AllPhotoFragment.imageList
-        } else if (intent.getStringExtra("from") == "Albums") {
-            AlbumsFragment.imageList
-        } else {
-            dataBase.getFavouritesImageList()
-        }
+            allPhotoList = if (external) {
+                allPhotoList.add(ImageData(contentUri,""))
+                allPhotoList
+            }
+            else if (intent.getStringExtra("from") == "AllPhotos") {
+                AllPhotoFragment.imageList
+            } else if (intent.getStringExtra("from") == "Albums") {
+                AlbumsFragment.imageList
+            } else {
+                dataBase.getFavouritesImageList()
+            }
 
         fullScreenImageAdapter =
             FullScreenImageAdapter(applicationContext, allPhotoList, this)
         binding.fullScreenViewPager.adapter = fullScreenImageAdapter
-        currentPosition = intent.getIntExtra("CurrentPosition", 1)
+        currentPosition = intent.getIntExtra("CurrentPosition", 0)
 
         binding.fullScreenViewPager.setCurrentItem(currentPosition, false)
 
@@ -62,14 +77,15 @@ class FullScreenImage : AppCompatActivity(),
     override fun onStart() {
         super.onStart()
         checkImageInFavorites(currentPosition)
-
-        BottomActionFragment.binding.favoritesButton.setOnClickListener {
-            if (dataBase.ifImageExits(allPhotoList[binding.fullScreenViewPager.currentItem].imageUri.toString())) {
-                dataBase.removeFavourites(allPhotoList[binding.fullScreenViewPager.currentItem].imageUri.toString())
-                BottomActionFragment.binding.favoritesButton.setImageResource(R.drawable.ic_favorite_border)
-            } else {
-                dataBase.addFavourites(allPhotoList[binding.fullScreenViewPager.currentItem])
-                BottomActionFragment.binding.favoritesButton.setImageResource(R.drawable.ic_favorite_filled)
+        if(!external) {
+            BottomActionFragment.binding.favoritesButton.setOnClickListener {
+                if (dataBase.ifImageExits(allPhotoList[binding.fullScreenViewPager.currentItem].imageUri.toString())) {
+                    dataBase.removeFavourites(allPhotoList[binding.fullScreenViewPager.currentItem].imageUri.toString())
+                    BottomActionFragment.binding.favoritesButton.setImageResource(R.drawable.ic_favorite_border)
+                } else {
+                    dataBase.addFavourites(allPhotoList[binding.fullScreenViewPager.currentItem])
+                    BottomActionFragment.binding.favoritesButton.setImageResource(R.drawable.ic_favorite_filled)
+                }
             }
         }
 
@@ -115,6 +131,12 @@ class FullScreenImage : AppCompatActivity(),
         stopSlideshow()
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        if(external) {
+            exitProcess(1)
+        }
+    }
 
     fun checkImageInFavorites(position: Int) {
         if (dataBase.ifImageExits(allPhotoList[position].imageUri.toString())) {
