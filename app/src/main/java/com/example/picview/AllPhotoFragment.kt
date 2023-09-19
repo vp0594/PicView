@@ -83,7 +83,7 @@ class AllPhotoFragment : Fragment() {
                         dateFormat.format(dateTaken)
                     }
 
-                    tempImageList.add(ImageData(imageUri, formattedDate,path))
+                    tempImageList.add(ImageData(imageUri, formattedDate))
                 } while (cursor.moveToNext())
             }
         }

@@ -10,16 +10,18 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.picview.databinding.ActivityFullScreenImageBinding
 
 class FullScreenImage : AppCompatActivity(), FullScreenImageAdapter.ShareButtonClickListener,
-    FullScreenImageAdapter.SideShowButtonClickListener {
+    FullScreenImageAdapter.SideShowButtonClickListener,
+    FullScreenImageAdapter.FavouritesButtonClickListener {
 
     private lateinit var binding: ActivityFullScreenImageBinding
     private lateinit var fullScreenImageAdapter: FullScreenImageAdapter
+    private lateinit var dataBase: FavouritesDataBase
     private var currentPosition = 0
 
     private val slideshowHandler = Handler()
     private var allPhotoList = ArrayList<ImageData>()
 
-    companion object{
+    companion object {
         var slideShow = false
     }
 
@@ -33,8 +35,10 @@ class FullScreenImage : AppCompatActivity(), FullScreenImageAdapter.ShareButtonC
             AlbumsFragment.imageList
         }
 
+        dataBase = FavouritesDataBase(this)
+
         fullScreenImageAdapter =
-            FullScreenImageAdapter(applicationContext, allPhotoList, this, this)
+            FullScreenImageAdapter(applicationContext, allPhotoList, this, this, this)
         binding.fullScreenViewPager.adapter = fullScreenImageAdapter
         currentPosition = intent.getIntExtra("CurrentPosition", 1)
 
@@ -47,6 +51,8 @@ class FullScreenImage : AppCompatActivity(), FullScreenImageAdapter.ShareButtonC
 
                 TopActionFragment.binding.dateTextView.text =
                     allPhotoList[position].dateTake
+
+                checkImageInFavorites(position)
             }
         })
 
@@ -91,5 +97,27 @@ class FullScreenImage : AppCompatActivity(), FullScreenImageAdapter.ShareButtonC
         stopSlideshow()
     }
 
+    override fun favouritesButtonClick(imageData: ImageData) {
+        BottomActionFragment.binding.favoritesButton.setOnClickListener {
+            if (dataBase.ifImageExits(imageData.imageUri.toString())) {
+                dataBase.removeFavourites(imageData.imageUri.toString())
+                Toast.makeText(applicationContext, "removed", Toast.LENGTH_SHORT).show()
+                BottomActionFragment.binding.favoritesButton.setImageResource(R.drawable.ic_favorite_border)
+            } else {
+                dataBase.addFavourites(imageData)
+                Toast.makeText(applicationContext, "added", Toast.LENGTH_SHORT).show()
+                BottomActionFragment.binding.favoritesButton.setImageResource(R.drawable.ic_favorite_filled)
+            }
+
+        }
+    }
+
+    fun checkImageInFavorites(position: Int) {
+        if (dataBase.ifImageExits(allPhotoList[position].imageUri.toString())) {
+            BottomActionFragment.binding.favoritesButton.setImageResource(R.drawable.ic_favorite_filled)
+        } else {
+            BottomActionFragment.binding.favoritesButton.setImageResource(R.drawable.ic_favorite_border)
+        }
+    }
 
 }

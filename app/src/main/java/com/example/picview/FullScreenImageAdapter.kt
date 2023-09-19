@@ -16,7 +16,8 @@ class FullScreenImageAdapter(
     private val context: Context,
     private val imageList: ArrayList<ImageData>,
     private val shareButtonClickListener: ShareButtonClickListener,
-    private val sideShowClickListener: SideShowButtonClickListener
+    private val sideShowClickListener: SideShowButtonClickListener,
+    private val favouritesButtonClickListener: FavouritesButtonClickListener
 
 ) :
     RecyclerView.Adapter<FullScreenImageAdapter.ViewHolder>() {
@@ -32,6 +33,10 @@ class FullScreenImageAdapter(
     interface SideShowButtonClickListener {
         fun onSideShowButtonClick()
         fun offSideShowButtonClick()
+    }
+
+    interface FavouritesButtonClickListener {
+        fun favouritesButtonClick(imageData: ImageData)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -68,6 +73,11 @@ class FullScreenImageAdapter(
         BottomActionFragment.binding.shareButton.setOnClickListener {
             shareButtonClickListener.onShareButtonClick(imageList[position].imageUri)
         }
+
+        BottomActionFragment.binding.favoritesButton.setOnClickListener {
+            favouritesButtonClickListener.favouritesButtonClick(imageList[position])
+        }
+
         BottomActionFragment.binding.sideShowButton.setOnClickListener {
             FullScreenImage.slideShow = true
             BottomActionFragment.binding.root.visibility = View.GONE
