@@ -1,6 +1,7 @@
 package com.example.picview
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.picview.databinding.ActivityAlbumImagesBinding
@@ -23,9 +24,13 @@ class AlbumImages : AppCompatActivity() {
         if (intent.getStringExtra("FolderName") == "Fav") {
             imageList = dataBase.getFavouritesImageList()
             from = "Fav"
+            binding.albumsTextView.text = "Favourites"
+            Toast.makeText(applicationContext, "fav", Toast.LENGTH_SHORT).show()
         } else {
             imageList = AlbumsFragment.imageList
             from = "Albums"
+            Toast.makeText(applicationContext, "alb", Toast.LENGTH_SHORT).show()
+            binding.albumsTextView.text = intent.getStringExtra("FolderName")
         }
 
         setRecyclerview()
@@ -33,7 +38,9 @@ class AlbumImages : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        imageList = dataBase.getFavouritesImageList()
+        if (intent.getStringExtra("FolderName") == "Fav") {
+            imageList = dataBase.getFavouritesImageList()
+        }
         setRecyclerview()
     }
 

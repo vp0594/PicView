@@ -89,26 +89,26 @@ class FullScreenImage : AppCompatActivity(),
         slideshowHandler.removeCallbacksAndMessages(null)
     }
 
-    private fun startSlideshow() {
-
+    private fun startSlideshow(position: Int) {
+        var currentImagePosition = position
         val delayMillis = 2000L
 
         val runnable = object : Runnable {
             override fun run() {
-                currentPosition++
+                currentImagePosition++
 
-                if (currentPosition >= allPhotoList.size) {
-                    currentPosition = 0
+                if (currentImagePosition >= allPhotoList.size) {
+                    currentImagePosition = 0
                 }
-                binding.fullScreenViewPager.setCurrentItem(currentPosition, true)
+                binding.fullScreenViewPager.setCurrentItem(currentImagePosition, true)
                 slideshowHandler.postDelayed(this, delayMillis)
             }
         }
         slideshowHandler.postDelayed(runnable, delayMillis)
     }
 
-    override fun onSideShowButtonClick() {
-        startSlideshow()
+    override fun onSideShowButtonClick(position: Int) {
+        startSlideshow(position)
     }
 
     override fun offSideShowButtonClick() {

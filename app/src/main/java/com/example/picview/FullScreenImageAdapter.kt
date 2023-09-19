@@ -22,7 +22,7 @@ class FullScreenImageAdapter(
     }
 
     interface SideShowButtonClickListener {
-        fun onSideShowButtonClick()
+        fun onSideShowButtonClick(position: Int)
         fun offSideShowButtonClick()
     }
 
@@ -61,7 +61,7 @@ class FullScreenImageAdapter(
             FullScreenImage.slideShow = true
             BottomActionFragment.binding.root.visibility = View.GONE
             TopActionFragment.binding.root.visibility = View.GONE
-            sideShowClickListener.onSideShowButtonClick()
+            sideShowClickListener.onSideShowButtonClick(position)
         }
 
         holder.image.isClickable = false
