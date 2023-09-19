@@ -8,16 +8,39 @@ import com.example.picview.databinding.ActivityAlbumImagesBinding
 class AlbumImages : AppCompatActivity() {
 
     private lateinit var binding: ActivityAlbumImagesBinding
-
+    private lateinit var dataBase: FavouritesDataBase
+    private var from: String = ""
+    private lateinit var imageList: ArrayList<ImageData>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAlbumImagesBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        dataBase = FavouritesDataBase(this)
+
+
+        if (intent.getStringExtra("FolderName") == "Fav") {
+            imageList = dataBase.getFavouritesImageList()
+            from = "Fav"
+        } else {
+            imageList = AlbumsFragment.imageList
+            from = "Albums"
+        }
+
+        setRecyclerview()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        imageList = dataBase.getFavouritesImageList()
+        setRecyclerview()
+    }
+
+    private fun setRecyclerview() {
         val allPhotoAdapter =
-            AllPhotoAdapter(applicationContext, AlbumsFragment.imageList, "Albums")
-        binding.albumsImagesRecylerView.layoutManager = GridLayoutManager(applicationContext, 4)
-        binding.albumsImagesRecylerView.adapter = allPhotoAdapter
+            AllPhotoAdapter(applicationContext, imageList, from)
+        binding.albumsImagesRecyclerView.layoutManager = GridLayoutManager(applicationContext, 4)
+        binding.albumsImagesRecyclerView.adapter = allPhotoAdapter
     }
 }

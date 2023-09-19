@@ -8,7 +8,6 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.picview.databinding.FragmentAlbumsBinding
@@ -42,8 +41,15 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
         binding.albumsRecyclerView.layoutManager = GridLayoutManager(context, 2)
         binding.albumsRecyclerView.adapter = albumsAdapter
 
+        binding.favoritesButton.setOnClickListener {
+            val intent = Intent(requireContext(), AlbumImages::class.java)
+            intent.putExtra("FolderName", "Fav")
+            startActivity(intent)
+        }
+
         return binding.root
     }
+
 
     private fun fetchAlbumsData() {
 
@@ -94,6 +100,7 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
     override fun onAlbumClick(folderName: String) {
         imageList = getImageList(folderName)
         val intent = Intent(requireContext(), AlbumImages::class.java)
+        intent.putExtra("FolderName", folderName)
         startActivity(intent)
     }
 
@@ -101,7 +108,7 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
         val imageList = ArrayList<ImageData>()
         val projection = arrayOf(
             MediaStore.Images.Media._ID,
-            MediaStore.Images.Media.DATE_TAKEN,MediaStore.Images.Media.DATA
+            MediaStore.Images.Media.DATE_TAKEN, MediaStore.Images.Media.DATA
         )
 
         val selection =
@@ -122,13 +129,15 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
         if (cursor != null) {
             if (cursor.moveToNext()) {
                 val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
-                val dateTakenColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_TAKEN)
+                val dateTakenColumn =
+                    cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_TAKEN)
 
                 val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
                 do {
                     val id = cursor.getLong(idColumn)
                     val dateTaken = cursor.getLong(dateTakenColumn)
-                    val path = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA))
+                    val path =
+                        cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA))
                     val imageUri =
                         ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
 
@@ -146,8 +155,10 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
 
         return imageList
     }
+
     private fun getDateModified(path: String): Long {
         return File(path).lastModified()
     }
+
 
 }

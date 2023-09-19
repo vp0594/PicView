@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">PicView</string>
     <string name="share">share</string>
-    <string name="favorites">favorites</string>
+    <string name="favorites">Favorites</string>
     <string name="delete">delete</string>
     <string name="sidesShow">SidesShow</string>
     <string name="albumsRaw">albumsCover</string>

@@ -1,7 +1,6 @@
 package com.example.picview
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
@@ -27,13 +26,17 @@ class FullScreenImage : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         binding = ActivityFullScreenImageBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        allPhotoList = if (intent.getStringExtra("from") == "AllPhotos") {
-            AllPhotoFragment.imageList
-        } else {
-            AlbumsFragment.imageList
-        }
+
 
         dataBase = FavouritesDataBase(this)
+
+        allPhotoList = if (intent.getStringExtra("from") == "AllPhotos") {
+            AllPhotoFragment.imageList
+        } else if (intent.getStringExtra("from") == "Albums") {
+            AlbumsFragment.imageList
+        } else {
+            dataBase.getFavouritesImageList()
+        }
 
         fullScreenImageAdapter =
             FullScreenImageAdapter(applicationContext, allPhotoList, this)
@@ -74,7 +77,10 @@ class FullScreenImage : AppCompatActivity(),
             val shareIntent = Intent()
             shareIntent.action = Intent.ACTION_SEND
             shareIntent.type = "image/*"
-            shareIntent.putExtra(Intent.EXTRA_STREAM, allPhotoList[binding.fullScreenViewPager.currentItem].imageUri)
+            shareIntent.putExtra(
+                Intent.EXTRA_STREAM,
+                allPhotoList[binding.fullScreenViewPager.currentItem].imageUri
+            )
             startActivity(Intent.createChooser(shareIntent, "Share Image"))
         }
     }
@@ -109,6 +115,7 @@ class FullScreenImage : AppCompatActivity(),
         stopSlideshow()
     }
 
+
     fun checkImageInFavorites(position: Int) {
         if (dataBase.ifImageExits(allPhotoList[position].imageUri.toString())) {
             BottomActionFragment.binding.favoritesButton.setImageResource(R.drawable.ic_favorite_filled)
@@ -116,5 +123,4 @@ class FullScreenImage : AppCompatActivity(),
             BottomActionFragment.binding.favoritesButton.setImageResource(R.drawable.ic_favorite_border)
         }
     }
-
 }
