@@ -8,9 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.example.picview.databinding.ActivityFullScreenImageBinding
 
-class FullScreenImage : AppCompatActivity(), FullScreenImageAdapter.ShareButtonClickListener,
-    FullScreenImageAdapter.SideShowButtonClickListener,
-    FullScreenImageAdapter.FavouritesButtonClickListener {
+class FullScreenImage : AppCompatActivity(),
+    FullScreenImageAdapter.SideShowButtonClickListener {
 
     private lateinit var binding: ActivityFullScreenImageBinding
     private lateinit var fullScreenImageAdapter: FullScreenImageAdapter
@@ -37,7 +36,7 @@ class FullScreenImage : AppCompatActivity(), FullScreenImageAdapter.ShareButtonC
         dataBase = FavouritesDataBase(this)
 
         fullScreenImageAdapter =
-            FullScreenImageAdapter(applicationContext, allPhotoList, this, this, this)
+            FullScreenImageAdapter(applicationContext, allPhotoList, this)
         binding.fullScreenViewPager.adapter = fullScreenImageAdapter
         currentPosition = intent.getIntExtra("CurrentPosition", 1)
 
@@ -60,6 +59,24 @@ class FullScreenImage : AppCompatActivity(), FullScreenImageAdapter.ShareButtonC
     override fun onStart() {
         super.onStart()
         checkImageInFavorites(currentPosition)
+
+        BottomActionFragment.binding.favoritesButton.setOnClickListener {
+            if (dataBase.ifImageExits(allPhotoList[binding.fullScreenViewPager.currentItem].imageUri.toString())) {
+                dataBase.removeFavourites(allPhotoList[binding.fullScreenViewPager.currentItem].imageUri.toString())
+                BottomActionFragment.binding.favoritesButton.setImageResource(R.drawable.ic_favorite_border)
+            } else {
+                dataBase.addFavourites(allPhotoList[binding.fullScreenViewPager.currentItem])
+                BottomActionFragment.binding.favoritesButton.setImageResource(R.drawable.ic_favorite_filled)
+            }
+        }
+
+        BottomActionFragment.binding.shareButton.setOnClickListener {
+            val shareIntent = Intent()
+            shareIntent.action = Intent.ACTION_SEND
+            shareIntent.type = "image/*"
+            shareIntent.putExtra(Intent.EXTRA_STREAM, allPhotoList[binding.fullScreenViewPager.currentItem].imageUri)
+            startActivity(Intent.createChooser(shareIntent, "Share Image"))
+        }
     }
 
     private fun stopSlideshow() {
@@ -84,31 +101,12 @@ class FullScreenImage : AppCompatActivity(), FullScreenImageAdapter.ShareButtonC
         slideshowHandler.postDelayed(runnable, delayMillis)
     }
 
-
-    override fun onShareButtonClick(imageUri: Uri) {
-        val shareIntent = Intent()
-        shareIntent.action = Intent.ACTION_SEND
-        shareIntent.type = "image/*"
-        shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri)
-        startActivity(Intent.createChooser(shareIntent, "Share Image"))
-    }
-
     override fun onSideShowButtonClick() {
         startSlideshow()
     }
 
     override fun offSideShowButtonClick() {
         stopSlideshow()
-    }
-
-    override fun favouritesButtonClick(imageData: ImageData, position: Int) {
-        if (dataBase.ifImageExits(allPhotoList[position].imageUri.toString())) {
-            dataBase.removeFavourites(allPhotoList[position].imageUri.toString())
-            BottomActionFragment.binding.favoritesButton.setImageResource(R.drawable.ic_favorite_border)
-        } else {
-            dataBase.addFavourites(allPhotoList[position])
-            BottomActionFragment.binding.favoritesButton.setImageResource(R.drawable.ic_favorite_filled)
-        }
     }
 
     fun checkImageInFavorites(position: Int) {
