@@ -25,7 +25,7 @@ class AlbumImages : AppCompatActivity() {
             imageList = dataBase.getFavouritesImageList()
             from = "Fav"
             binding.albumsTextView.text = "Favourites"
-            Toast.makeText(applicationContext, "fav", Toast.LENGTH_SHORT).show()
+
         } else {
             imageList = AlbumsFragment.imageList
             from = "Albums"
