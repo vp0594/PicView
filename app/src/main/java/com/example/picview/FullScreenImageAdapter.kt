@@ -2,6 +2,7 @@ package com.example.picview
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.net.Uri
 import android.view.GestureDetector
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -13,11 +14,18 @@ import com.example.picview.databinding.ImageSliderBinding
 
 class FullScreenImageAdapter(
     private val context: Context,
-    private val imageList: ArrayList<ImageData>
+    private val imageList: ArrayList<ImageData>,
+    private val shareButtonClickListener: ShareButtonClickListener
+
 ) :
     RecyclerView.Adapter<FullScreenImageAdapter.ViewHolder>() {
     class ViewHolder(binding: ImageSliderBinding) : RecyclerView.ViewHolder(binding.root) {
         val image = binding.sliderImageView
+    }
+
+
+    interface ShareButtonClickListener {
+        fun onShareButtonClick(imageUri: Uri)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -41,6 +49,13 @@ class FullScreenImageAdapter(
                 TopActionFragment.binding.root.visibility = View.VISIBLE
             }
         }
+
+
+        BottomActionFragment.binding.shareButton.setOnClickListener {
+            shareButtonClickListener.onShareButtonClick(imageList[position].imageUri)
+        }
+
+
 
         holder.image.isClickable = false
 

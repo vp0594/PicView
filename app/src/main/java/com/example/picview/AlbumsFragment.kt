@@ -12,6 +12,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.picview.databinding.FragmentAlbumsBinding
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 
 class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
@@ -98,7 +101,7 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
         val imageList = ArrayList<ImageData>()
         val projection = arrayOf(
             MediaStore.Images.Media._ID,
-            MediaStore.Images.Media.DATE_TAKEN
+            MediaStore.Images.Media.DATE_TAKEN,MediaStore.Images.Media.DATA
         )
 
         val selection =
@@ -119,15 +122,23 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
         if (cursor != null) {
             if (cursor.moveToNext()) {
                 val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
-                val dateTakenColumn =
-                    cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_TAKEN)
+                val dateTakenColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_TAKEN)
 
+                val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
                 do {
                     val id = cursor.getLong(idColumn)
                     val dateTaken = cursor.getLong(dateTakenColumn)
+                    val path = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA))
                     val imageUri =
                         ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
-                    imageList.add(ImageData(imageUri, dateTaken.toString()))
+
+                    val formattedDate = if (dateTaken == 0L) {
+                        dateFormat.format(getDateModified(path))
+                    } else {
+                        dateFormat.format(dateTaken)
+                    }
+
+                    imageList.add(ImageData(imageUri, formattedDate,path))
                 } while (cursor.moveToNext())
             }
             cursor.close()
@@ -135,6 +146,8 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
 
         return imageList
     }
-
+    private fun getDateModified(path: String): Long {
+        return File(path).lastModified()
+    }
 
 }

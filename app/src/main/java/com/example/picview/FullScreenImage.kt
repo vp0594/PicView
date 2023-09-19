@@ -1,12 +1,13 @@
 package com.example.picview
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.example.picview.databinding.ActivityFullScreenImageBinding
 
-class FullScreenImage : AppCompatActivity() {
+class FullScreenImage : AppCompatActivity(), FullScreenImageAdapter.ShareButtonClickListener {
 
     private lateinit var binding: ActivityFullScreenImageBinding
     private lateinit var fullScreenImageAdapter: FullScreenImageAdapter
@@ -24,7 +25,7 @@ class FullScreenImage : AppCompatActivity() {
             AlbumsFragment.imageList
         }
 
-        fullScreenImageAdapter = FullScreenImageAdapter(applicationContext, allPhotoList)
+        fullScreenImageAdapter = FullScreenImageAdapter(applicationContext, allPhotoList, this)
         binding.fullScreenViewPager.adapter = fullScreenImageAdapter
         currentPosition = intent.getIntExtra("CurrentPosition", 1)
 
@@ -41,5 +42,13 @@ class FullScreenImage : AppCompatActivity() {
             }
         })
 
+    }
+
+    override fun onShareButtonClick(imageUri: Uri) {
+        val shareIntent = Intent()
+        shareIntent.action = Intent.ACTION_SEND
+        shareIntent.type = "image/*"
+        shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri)
+        startActivity(Intent.createChooser(shareIntent, "Share Image"))
     }
 }
