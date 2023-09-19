@@ -29,7 +29,6 @@ class AlbumImages : AppCompatActivity() {
         } else {
             imageList = AlbumsFragment.imageList
             from = "Albums"
-            Toast.makeText(applicationContext, "alb", Toast.LENGTH_SHORT).show()
             binding.albumsTextView.text = intent.getStringExtra("FolderName")
         }
 

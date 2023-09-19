@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        setUpTabLayout()
+
     }
 
 
@@ -49,6 +49,8 @@ class MainActivity : AppCompatActivity() {
 
         if (!hasPermission)
             updateOrRequestPermission()
+        else
+            setUpTabLayout()
     }
 
 
@@ -82,6 +84,7 @@ class MainActivity : AppCompatActivity() {
             if (requestCode == 2) {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     hasPermission = true
+                    setUpTabLayout()
                 } else {
                     if (!first) {
                         startActivity(Intent(this@MainActivity, RequestPermission::class.java))
