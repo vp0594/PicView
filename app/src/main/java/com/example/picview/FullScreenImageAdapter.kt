@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.picview.databinding.ImageSliderBinding
@@ -36,7 +37,7 @@ class FullScreenImageAdapter(
     }
 
     interface FavouritesButtonClickListener {
-        fun favouritesButtonClick(imageData: ImageData)
+        fun favouritesButtonClick(imageData: ImageData,position: Int)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -75,7 +76,7 @@ class FullScreenImageAdapter(
         }
 
         BottomActionFragment.binding.favoritesButton.setOnClickListener {
-            favouritesButtonClickListener.favouritesButtonClick(imageList[position])
+            favouritesButtonClickListener.favouritesButtonClick(imageList[position],position)
         }
 
         BottomActionFragment.binding.sideShowButton.setOnClickListener {

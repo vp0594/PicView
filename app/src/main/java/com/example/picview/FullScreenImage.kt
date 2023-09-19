@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.example.picview.databinding.ActivityFullScreenImageBinding
@@ -58,13 +57,18 @@ class FullScreenImage : AppCompatActivity(), FullScreenImageAdapter.ShareButtonC
 
     }
 
+    override fun onStart() {
+        super.onStart()
+        checkImageInFavorites(currentPosition)
+    }
+
     private fun stopSlideshow() {
         slideshowHandler.removeCallbacksAndMessages(null)
     }
 
     private fun startSlideshow() {
 
-        val delayMillis = 3000L
+        val delayMillis = 2000L
 
         val runnable = object : Runnable {
             override fun run() {
@@ -97,18 +101,13 @@ class FullScreenImage : AppCompatActivity(), FullScreenImageAdapter.ShareButtonC
         stopSlideshow()
     }
 
-    override fun favouritesButtonClick(imageData: ImageData) {
-        BottomActionFragment.binding.favoritesButton.setOnClickListener {
-            if (dataBase.ifImageExits(imageData.imageUri.toString())) {
-                dataBase.removeFavourites(imageData.imageUri.toString())
-                Toast.makeText(applicationContext, "removed", Toast.LENGTH_SHORT).show()
-                BottomActionFragment.binding.favoritesButton.setImageResource(R.drawable.ic_favorite_border)
-            } else {
-                dataBase.addFavourites(imageData)
-                Toast.makeText(applicationContext, "added", Toast.LENGTH_SHORT).show()
-                BottomActionFragment.binding.favoritesButton.setImageResource(R.drawable.ic_favorite_filled)
-            }
-
+    override fun favouritesButtonClick(imageData: ImageData, position: Int) {
+        if (dataBase.ifImageExits(allPhotoList[position].imageUri.toString())) {
+            dataBase.removeFavourites(allPhotoList[position].imageUri.toString())
+            BottomActionFragment.binding.favoritesButton.setImageResource(R.drawable.ic_favorite_border)
+        } else {
+            dataBase.addFavourites(allPhotoList[position])
+            BottomActionFragment.binding.favoritesButton.setImageResource(R.drawable.ic_favorite_filled)
         }
     }
 
