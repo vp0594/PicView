@@ -15,8 +15,7 @@ class FullScreenImageAdapter(
     private val context: Context,
     private val imageList: ArrayList<ImageData>,
     private val sideShowClickListener: SideShowButtonClickListener
-) :
-    RecyclerView.Adapter<FullScreenImageAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<FullScreenImageAdapter.ViewHolder>() {
     class ViewHolder(binding: ImageSliderBinding) : RecyclerView.ViewHolder(binding.root) {
         val image = binding.sliderImageView
     }

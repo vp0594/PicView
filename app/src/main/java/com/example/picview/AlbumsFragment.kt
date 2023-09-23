@@ -29,8 +29,7 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
 
         _binding = FragmentAlbumsBinding.inflate(inflater, container, false)
@@ -43,7 +42,7 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
 
         binding.favoritesButton.setOnClickListener {
             val intent = Intent(requireContext(), AlbumImages::class.java)
-            intent.putExtra("FolderName", "Fav")
+            intent.putExtra("FolderName", "UserFav")
             startActivity(intent)
         }
 
@@ -59,11 +58,7 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
         val sortBy = "${MediaStore.Images.Media.BUCKET_DISPLAY_NAME} ASC"
 
         val cursor = requireContext().contentResolver.query(
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-            projection,
-            null,
-            null,
-            sortBy
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null, null, sortBy
         )
         val albumMap = mutableMapOf<String, String>()
         if (cursor != null) {
@@ -108,11 +103,11 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
         val imageList = ArrayList<ImageData>()
         val projection = arrayOf(
             MediaStore.Images.Media._ID,
-            MediaStore.Images.Media.DATE_TAKEN, MediaStore.Images.Media.DATA
+            MediaStore.Images.Media.DATE_TAKEN,
+            MediaStore.Images.Media.DATA
         )
 
-        val selection =
-            "${MediaStore.Images.Media.BUCKET_DISPLAY_NAME} = ?"
+        val selection = "${MediaStore.Images.Media.BUCKET_DISPLAY_NAME} = ?"
 
         val selectionArgs = arrayOf(folderName)
 

@@ -37,7 +37,7 @@ class AllPhotoFragment : Fragment() {
 
         binding.allPhotoRecyclerView.setHasFixedSize(true)
         binding.allPhotoRecyclerView.layoutManager = GridLayoutManager(context, 4)
-        allPhotoAdapter = AllPhotoAdapter(context, imageList,"AllPhotos")
+        allPhotoAdapter = AllPhotoAdapter(context, imageList, "AllPhotos")
         binding.allPhotoRecyclerView.adapter = allPhotoAdapter
 
         return binding.root
@@ -50,7 +50,11 @@ class AllPhotoFragment : Fragment() {
 
         val selection = MediaStore.Images.Media._ID
 
-        val projection = arrayOf(MediaStore.Images.Media._ID, MediaStore.Images.Media.DATE_TAKEN, MediaStore.Images.Media.DATA)
+        val projection = arrayOf(
+            MediaStore.Images.Media._ID,
+            MediaStore.Images.Media.DATE_TAKEN,
+            MediaStore.Images.Media.DATA
+        )
 
         val sortBy = "${MediaStore.Images.Media.DATE_ADDED} DESC"
 
@@ -66,12 +70,14 @@ class AllPhotoFragment : Fragment() {
             if (cursor.moveToNext()) {
 
                 val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
-                val dateTakenColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_TAKEN)
+                val dateTakenColumn =
+                    cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_TAKEN)
 
                 val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
 
                 do {
-                    val path = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA))
+                    val path =
+                        cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA))
                     val id = cursor.getLong(idColumn)
                     val dateTaken = cursor.getLong(dateTakenColumn)
                     val imageUri =

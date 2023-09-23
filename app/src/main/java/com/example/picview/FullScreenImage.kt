@@ -27,7 +27,7 @@ class FullScreenImage : AppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        val contentUri = if(intent.data?.scheme.contentEquals("content")) {
+        val contentUri = if (intent.data?.scheme.contentEquals("content")) {
             external = true
             intent.data!!
         } else {
@@ -41,17 +41,16 @@ class FullScreenImage : AppCompatActivity(),
 
         dataBase = FavouritesDataBase(this)
 
-            allPhotoList = if (external) {
-                allPhotoList.add(ImageData(contentUri,""))
-                allPhotoList
-            }
-            else if (intent.getStringExtra("from") == "AllPhotos") {
-                AllPhotoFragment.imageList
-            } else if (intent.getStringExtra("from") == "Albums") {
-                AlbumsFragment.imageList
-            } else {
-                dataBase.getFavouritesImageList()
-            }
+        allPhotoList = if (external) {
+            allPhotoList.add(ImageData(contentUri, ""))
+            allPhotoList
+        } else if (intent.getStringExtra("from") == "AllPhotos") {
+            AllPhotoFragment.imageList
+        } else if (intent.getStringExtra("from") == "Albums") {
+            AlbumsFragment.imageList
+        } else {
+            dataBase.getFavouritesImageList()
+        }
 
         fullScreenImageAdapter =
             FullScreenImageAdapter(applicationContext, allPhotoList, this)
@@ -77,7 +76,7 @@ class FullScreenImage : AppCompatActivity(),
     override fun onStart() {
         super.onStart()
         checkImageInFavorites(currentPosition)
-        if(!external) {
+        if (!external) {
             BottomActionFragment.binding.favoritesButton.setOnClickListener {
                 if (dataBase.ifImageExits(allPhotoList[binding.fullScreenViewPager.currentItem].imageUri.toString())) {
                     dataBase.removeFavourites(allPhotoList[binding.fullScreenViewPager.currentItem].imageUri.toString())
@@ -133,7 +132,7 @@ class FullScreenImage : AppCompatActivity(),
 
     override fun onBackPressed() {
         super.onBackPressed()
-        if(external) {
+        if (external) {
             exitProcess(1)
         }
     }

@@ -4,9 +4,8 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.example.picview.databinding.ActivityMainBinding
 import com.google.android.material.tabs.TabLayoutMediator
@@ -17,7 +16,6 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         var hasPermission = false
-        private var first = true
 
     }
 
@@ -30,9 +28,7 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-
     }
-
 
     private fun checkAppHasPermission() {
         hasPermission =
@@ -86,11 +82,10 @@ class MainActivity : AppCompatActivity() {
                     hasPermission = true
                     setUpTabLayout()
                 } else {
-                    if (!first) {
-                        startActivity(Intent(this@MainActivity, RequestPermission::class.java))
-                        finish()
-                    }
-                    first = false
+
+                    startActivity(Intent(this@MainActivity, RequestPermission::class.java))
+                    finish()
+
                 }
             }
         } else {
@@ -98,11 +93,10 @@ class MainActivity : AppCompatActivity() {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     hasPermission = true
                 } else {
-                    if (!first) {
-                        startActivity(Intent(this@MainActivity, RequestPermission::class.java))
-                        finish()
-                    }
-                    first = false
+
+                    startActivity(Intent(this@MainActivity, RequestPermission::class.java))
+                    finish()
+
                 }
             }
         }

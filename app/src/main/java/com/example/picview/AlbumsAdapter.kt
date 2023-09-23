@@ -11,8 +11,7 @@ class AlbumsAdapter(
     private val context: Context,
     private val albumsData: ArrayList<AlbumData>,
     private val albumClickListener: AlbumClickListener
-) :
-    RecyclerView.Adapter<AlbumsAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<AlbumsAdapter.ViewHolder>() {
     class ViewHolder(binding: AlbumsRawBinding) : RecyclerView.ViewHolder(binding.root) {
         val albumsCover = binding.albumsCoverImageView
         val albumsName = binding.albumsNameTextView

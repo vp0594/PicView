@@ -21,7 +21,7 @@ class AlbumImages : AppCompatActivity() {
         dataBase = FavouritesDataBase(this)
 
 
-        if (intent.getStringExtra("FolderName") == "Fav") {
+        if (intent.getStringExtra("FolderName") == "UserFav") {
             imageList = dataBase.getFavouritesImageList()
             from = "Fav"
             binding.albumsTextView.text = "Favourites"
@@ -37,7 +37,7 @@ class AlbumImages : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (intent.getStringExtra("FolderName") == "Fav") {
+        if (intent.getStringExtra("FolderName") == "UserFav") {
             imageList = dataBase.getFavouritesImageList()
         }
         setRecyclerview()

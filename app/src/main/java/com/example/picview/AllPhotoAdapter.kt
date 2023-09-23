@@ -31,7 +31,7 @@ class AllPhotoAdapter(
         holder.itemView.setOnClickListener {
             val intent = Intent(context, FullScreenImage::class.java)
             intent.putExtra("CurrentPosition", position)
-            intent.putExtra("from",from)
+            intent.putExtra("from", from)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
         }
