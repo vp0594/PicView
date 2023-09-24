@@ -5,4 +5,6 @@
     <string name="delete">delete</string>
     <string name="sidesShow">SidesShow</string>
     <string name="albumsRaw">albumsCover</string>
+    <string name="request_permission">Request Permission</string>
+    <string name="imageRaw">imageRaw</string>
 </resources>

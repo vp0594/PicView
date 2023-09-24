@@ -6,11 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".FullScreenImage">
 
-
-
-
-
-
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/fullScreenViewPager"
         android:layout_width="match_parent"
