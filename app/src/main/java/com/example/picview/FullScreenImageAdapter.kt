@@ -27,6 +27,7 @@ class FullScreenImageAdapter(
         fun onSideShowButtonClick(position: Int)
         fun offSideShowButtonClick()
     }
+
     interface VideoActionListener {
         fun hideVideoAction()
         fun showVideoAction()
@@ -45,7 +46,7 @@ class FullScreenImageAdapter(
         if (imageList[position].isVideo) {
             holder.image.visibility = View.GONE
             holder.video.setVideoURI(imageList[position].mediaUri)
-            Toast.makeText(context, position.toString(), Toast.LENGTH_SHORT).show()
+
             videoActionListener.showVideoAction()
         } else {
             holder.image.visibility = View.VISIBLE
@@ -55,6 +56,7 @@ class FullScreenImageAdapter(
 
         VideoActionFragment.binding.playPauseButton.setOnClickListener {
             holder.video.start()
+            Toast.makeText(context, "yes" + position.toString(), Toast.LENGTH_SHORT).show()
         }
 
         holder.image.setOnClickListener {

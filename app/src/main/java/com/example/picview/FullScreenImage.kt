@@ -68,20 +68,26 @@ class FullScreenImage : AppCompatActivity(),
 
                 TopActionFragment.binding.dateTextView.text =
                     allPhotoList[position].dateTake
-                if (allPhotoList[position].isVideo) {
-                    showVideoAction()
-                } else {
-                    hideVideoAction()
-                }
+                checkVideo(position)
                 checkImageInFavorites(position)
             }
         })
 
+
+    }
+
+    private fun checkVideo(position: Int) {
+        if (allPhotoList[position].isVideo) {
+            showVideoAction()
+        } else {
+            hideVideoAction()
+        }
     }
 
     override fun onStart() {
         super.onStart()
         checkImageInFavorites(currentPosition)
+        checkVideo(currentPosition)
         if (!external) {
             BottomActionFragment.binding.favoritesButton.setOnClickListener {
                 if (dataBase.ifImageExits(allPhotoList[binding.fullScreenViewPager.currentItem].mediaUri.toString())) {
@@ -104,6 +110,7 @@ class FullScreenImage : AppCompatActivity(),
             )
             startActivity(Intent.createChooser(shareIntent, "Share Image"))
         }
+
     }
 
     private fun stopSlideshow() {

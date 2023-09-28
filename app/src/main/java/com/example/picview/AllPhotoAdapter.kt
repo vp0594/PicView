@@ -43,7 +43,6 @@ class AllPhotoAdapter(
 
         holder.itemView.setOnClickListener {
             val intent = Intent(context, FullScreenImage::class.java)
-            Toast.makeText(context,imageList[position].dateTake.toString() + imageList[position].isVideo.toString(), Toast.LENGTH_SHORT).show()
             intent.putExtra("CurrentPosition", position)
             intent.putExtra("from", from)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
