@@ -15,7 +15,8 @@ import com.example.picview.databinding.ImageSliderBinding
 class FullScreenImageAdapter(
     private val context: Context,
     private val imageList: ArrayList<ImageData>,
-    private val sideShowClickListener: SideShowButtonClickListener
+    private val sideShowClickListener: SideShowButtonClickListener,
+    private val videoActionListener: VideoActionListener
 ) : RecyclerView.Adapter<FullScreenImageAdapter.ViewHolder>() {
     class ViewHolder(binding: ImageSliderBinding) : RecyclerView.ViewHolder(binding.root) {
         val image = binding.sliderImageView
@@ -25,6 +26,10 @@ class FullScreenImageAdapter(
     interface SideShowButtonClickListener {
         fun onSideShowButtonClick(position: Int)
         fun offSideShowButtonClick()
+    }
+    interface VideoActionListener {
+        fun hideVideoAction()
+        fun showVideoAction()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -41,9 +46,11 @@ class FullScreenImageAdapter(
             holder.image.visibility = View.GONE
             holder.video.setVideoURI(imageList[position].mediaUri)
             Toast.makeText(context, position.toString(), Toast.LENGTH_SHORT).show()
+            videoActionListener.showVideoAction()
         } else {
             holder.image.visibility = View.VISIBLE
             Glide.with(context).load(imageList[position].mediaUri).into(holder.image)
+            videoActionListener.hideVideoAction()
         }
 
 

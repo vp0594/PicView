@@ -11,7 +11,7 @@ import com.example.picview.databinding.ActivityFullScreenImageBinding
 import kotlin.system.exitProcess
 
 class FullScreenImage : AppCompatActivity(),
-    FullScreenImageAdapter.SideShowButtonClickListener {
+    FullScreenImageAdapter.SideShowButtonClickListener, FullScreenImageAdapter.VideoActionListener {
 
     private lateinit var binding: ActivityFullScreenImageBinding
     private lateinit var fullScreenImageAdapter: FullScreenImageAdapter
@@ -43,7 +43,7 @@ class FullScreenImage : AppCompatActivity(),
         dataBase = FavouritesDataBase(this)
 
         allPhotoList = if (external) {
-            allPhotoList.add(ImageData(contentUri, "",false))
+            allPhotoList.add(ImageData(contentUri, "", false))
             allPhotoList
         } else if (intent.getStringExtra("from") == "AllPhotos") {
             AllPhotoFragment.imageList
@@ -54,17 +54,12 @@ class FullScreenImage : AppCompatActivity(),
         }
 
         fullScreenImageAdapter =
-            FullScreenImageAdapter(applicationContext, allPhotoList, this)
+            FullScreenImageAdapter(applicationContext, allPhotoList, this, this)
         binding.fullScreenViewPager.adapter = fullScreenImageAdapter
         currentPosition = intent.getIntExtra("CurrentPosition", 0)
 
         binding.fullScreenViewPager.setCurrentItem(currentPosition, false)
-        if(allPhotoList[currentPosition].isVideo){
-            VideoActionFragment.binding.root.visibility=View.VISIBLE
-        }
-        else{
-            VideoActionFragment.binding.root.visibility=View.GONE
-        }
+
 
         binding.fullScreenViewPager.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
@@ -73,14 +68,11 @@ class FullScreenImage : AppCompatActivity(),
 
                 TopActionFragment.binding.dateTextView.text =
                     allPhotoList[position].dateTake
-
-                if(allPhotoList[position].isVideo){
-                    VideoActionFragment.binding.root.visibility=View.VISIBLE
+                if (allPhotoList[position].isVideo) {
+                    showVideoAction()
+                } else {
+                    hideVideoAction()
                 }
-                else{
-                    VideoActionFragment.binding.root.visibility=View.GONE
-                }
-
                 checkImageInFavorites(position)
             }
         })
@@ -157,5 +149,13 @@ class FullScreenImage : AppCompatActivity(),
         } else {
             BottomActionFragment.binding.favoritesButton.setImageResource(R.drawable.ic_favorite_border)
         }
+    }
+
+    override fun hideVideoAction() {
+        VideoActionFragment.binding.root.visibility = View.GONE
+    }
+
+    override fun showVideoAction() {
+        VideoActionFragment.binding.root.visibility = View.VISIBLE
     }
 }
