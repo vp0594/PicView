@@ -53,6 +53,9 @@ class FullScreenImageAdapter(
             videoActionListener.hideVideoAction()
         }
 
+        VideoActionFragment.binding.playPauseButton.setOnClickListener {
+            holder.video.start()
+        }
 
         holder.image.setOnClickListener {
 
