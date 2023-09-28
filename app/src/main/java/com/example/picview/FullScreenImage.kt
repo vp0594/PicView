@@ -42,7 +42,7 @@ class FullScreenImage : AppCompatActivity(),
         dataBase = FavouritesDataBase(this)
 
         allPhotoList = if (external) {
-            allPhotoList.add(ImageData(contentUri, ""))
+            allPhotoList.add(ImageData(contentUri, "",false))
             allPhotoList
         } else if (intent.getStringExtra("from") == "AllPhotos") {
             AllPhotoFragment.imageList

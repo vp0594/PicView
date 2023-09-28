@@ -3,23 +3,26 @@ package com.example.picview
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.picview.databinding.AllImageRawBinding
+import com.example.picview.databinding.ItemRawBinding
+
 
 class AllPhotoAdapter(
     private val context: Context,
     private val imageList: ArrayList<ImageData>,
     private val from: String
-) :
-    RecyclerView.Adapter<AllPhotoAdapter.ViewHolder>() {
-    class ViewHolder(binding: AllImageRawBinding) : RecyclerView.ViewHolder(binding.root) {
+) : RecyclerView.Adapter<AllPhotoAdapter.ViewHolder>() {
+
+    class ViewHolder(binding: ItemRawBinding) : RecyclerView.ViewHolder(binding.root) {
         val image = binding.allPhotoImageView
+        val videoIcon = binding.itemVideo
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(AllImageRawBinding.inflate(LayoutInflater.from(context), parent, false))
+        return ViewHolder(ItemRawBinding.inflate(LayoutInflater.from(context), parent, false))
     }
 
     override fun getItemCount(): Int {
@@ -27,7 +30,16 @@ class AllPhotoAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        if (imageList[position].isVideo)
+            holder.videoIcon.visibility = View.VISIBLE
         Glide.with(context).load(imageList[position].imageUri).into(holder.image)
+
+//        holder.itemView.setOnLongClickListener {
+//            //set all checkbox visibility for all images
+//            holder.checkBox.visibility = View.VISIBLE
+//            true
+//        }
+
         holder.itemView.setOnClickListener {
             val intent = Intent(context, FullScreenImage::class.java)
             intent.putExtra("CurrentPosition", position)

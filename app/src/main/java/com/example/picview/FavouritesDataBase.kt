@@ -76,7 +76,7 @@ class FavouritesDataBase(context: Context) :
                 val formattedDate = cursor.getString(cursor.getColumnIndexOrThrow(dateTaken))
                 val imageUri = Uri.parse(imageUriStr)
 
-                tempImageList.add(ImageData(imageUri, formattedDate))
+                tempImageList.add(ImageData(imageUri, formattedDate,false))
             }
             cursor.close()
         }

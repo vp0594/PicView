@@ -5,8 +5,11 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.example.picview.databinding.ActivityMainBinding
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -15,58 +18,64 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     companion object {
-        var hasPermission = false
-
+        private const val PERMISSION_REQUEST_EXTERNAL_STORAGE = 1
+        private const val PERMISSION_REQUEST_MEDIA_IMAGES = 2
+        private const val PERMISSION_REQUEST_MEDIA_VIDEO = 3
+        var hasPermissionImages = false
+        var hasPermissionVideos = false
     }
 
-
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-
-        checkAppHasPermission()
-
         setContentView(binding.root)
 
+        checkAppPermissions()
     }
 
-    private fun checkAppHasPermission() {
-        hasPermission =
-            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.TIRAMISU)
-                ActivityCompat.checkSelfPermission(
-                    this@MainActivity,
-                    Manifest.permission.READ_EXTERNAL_STORAGE
-                ) == PackageManager.PERMISSION_GRANTED
-            else
-                ActivityCompat.checkSelfPermission(
-                    this@MainActivity,
-                    Manifest.permission.READ_MEDIA_IMAGES
-                ) == PackageManager.PERMISSION_GRANTED
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun checkAppPermissions() {
+        val permissionsToRequest = mutableListOf<String>()
 
-        if (!hasPermission)
-            updateOrRequestPermission()
-        else
-            setUpTabLayout()
-    }
-
-
-    private fun updateOrRequestPermission() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-            ActivityCompat.requestPermissions(
-                this@MainActivity,
-                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                1
-            )
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                permissionsToRequest.add(Manifest.permission.READ_EXTERNAL_STORAGE)
+            }
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            ActivityCompat.requestPermissions(
-                this@MainActivity,
-                arrayOf(Manifest.permission.READ_MEDIA_IMAGES),
-                2
-            )
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_MEDIA_IMAGES
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            permissionsToRequest.add(Manifest.permission.READ_MEDIA_IMAGES)
         }
 
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_MEDIA_VIDEO
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            permissionsToRequest.add(Manifest.permission.READ_MEDIA_VIDEO)
+        }
+
+        if (permissionsToRequest.isNotEmpty()) {
+            ActivityCompat.requestPermissions(
+                this,
+                permissionsToRequest.toTypedArray(),
+                PERMISSION_REQUEST_EXTERNAL_STORAGE
+            )
+        } else {
+            // All required permissions are already granted
+            hasPermissionImages = true
+            hasPermissionVideos = true
+            setUpTabLayout()
+        }
     }
 
     override fun onRequestPermissionsResult(
@@ -76,27 +85,16 @@ class MainActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (requestCode == 2) {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    hasPermission = true
+        when (requestCode) {
+            PERMISSION_REQUEST_EXTERNAL_STORAGE, PERMISSION_REQUEST_MEDIA_IMAGES, PERMISSION_REQUEST_MEDIA_VIDEO -> {
+                if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
+                    hasPermissionImages = true
+                    hasPermissionVideos = true
                     setUpTabLayout()
                 } else {
-
-                    startActivity(Intent(this@MainActivity, RequestPermission::class.java))
+                    Toast.makeText(applicationContext, "Permission denied", Toast.LENGTH_SHORT).show()
+                   startActivity(Intent(applicationContext,RequestPermission::class.java))
                     finish()
-
-                }
-            }
-        } else {
-            if (requestCode == 1) {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    hasPermission = true
-                } else {
-
-                    startActivity(Intent(this@MainActivity, RequestPermission::class.java))
-                    finish()
-
                 }
             }
         }

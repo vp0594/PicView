@@ -7,4 +7,5 @@
     <string name="albumsRaw">albumsCover</string>
     <string name="request_permission">Request Permission</string>
     <string name="imageRaw">imageRaw</string>
+    <string name="videoRaw">Video\n</string>
 </resources>

@@ -142,7 +142,7 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
                         dateFormat.format(dateTaken)
                     }
 
-                    imageList.add(ImageData(imageUri, formattedDate))
+                    imageList.add(ImageData(imageUri, formattedDate,false))
                 } while (cursor.moveToNext())
             }
             cursor.close()

@@ -6,6 +6,7 @@
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
 
     <application
         android:allowBackup="true"
@@ -18,16 +19,23 @@
         android:theme="@style/Base.Theme.PicView"
         tools:targetApi="33">
         <activity
+            android:name=".FullScreenVideo"
+            android:exported="false" />
+        <activity
             android:name=".AlbumImages"
             android:exported="false" />
         <activity
             android:name=".FullScreenImage"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="image/*" android:scheme="content"/>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:mimeType="image/*"
+                    android:scheme="content" />
             </intent-filter>
         </activity>
         <activity

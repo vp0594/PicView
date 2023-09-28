@@ -1,7 +1,7 @@
 package com.example.picview
 
 import android.os.Bundle
-import android.widget.Toast
+
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.picview.databinding.ActivityAlbumImagesBinding
