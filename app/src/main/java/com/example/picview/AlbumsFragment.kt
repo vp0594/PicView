@@ -83,6 +83,40 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
             }
             cursor.close()
         }
+
+
+        val videoProjection =
+            arrayOf(MediaStore.Video.Media.BUCKET_DISPLAY_NAME, MediaStore.Video.Media.DATA)
+
+        val videoSortBy = "${MediaStore.Video.Media.BUCKET_DISPLAY_NAME} ASC"
+
+        val videoCursor = requireContext().contentResolver.query(
+            MediaStore.Video.Media.EXTERNAL_CONTENT_URI, videoProjection, null, null, videoSortBy
+        )
+
+        if (videoCursor != null) {
+            if (videoCursor.moveToNext()) {
+                val folderNameColumn =
+                    videoCursor.getColumnIndexOrThrow(MediaStore.Video.Media.BUCKET_DISPLAY_NAME)
+                val imageCoverPathColumn =
+                    videoCursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA)
+
+                do {
+                    val folderName = videoCursor.getString(folderNameColumn)
+                    val imageCoverPath = videoCursor.getString(imageCoverPathColumn)
+
+                    if (!albumMap.containsKey(folderName)) {
+                        albumMap[folderName] = imageCoverPath
+                    }
+
+                } while (videoCursor.moveToNext())
+                albumMap.forEach { (folderName, imagePath) ->
+                    albumsData.add(AlbumData(folderName, imagePath))
+                }
+            }
+            videoCursor.close()
+        }
+
     }
 
 
@@ -146,6 +180,53 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
                 } while (cursor.moveToNext())
             }
             cursor.close()
+        }
+
+        val videoProjection = arrayOf(
+            MediaStore.Video.Media._ID,
+            MediaStore.Video.Media.DATE_TAKEN,
+            MediaStore.Video.Media.DATA
+        )
+
+        val videoSelection = "${MediaStore.Video.Media.BUCKET_DISPLAY_NAME} = ?"
+
+        val videoSelectionArgs = arrayOf(folderName)
+
+        val videoSortOrder = "${MediaStore.Video.Media.DATE_TAKEN} DESC"
+
+        val videoCursor = requireContext().contentResolver.query(
+            MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+            videoProjection,
+            videoSelection,
+            videoSelectionArgs,
+            videoSortOrder
+        )
+
+        if (videoCursor != null) {
+            if (videoCursor.moveToNext()) {
+                val idColumn = videoCursor.getColumnIndexOrThrow(MediaStore.Video.Media._ID)
+                val dateTakenColumn =
+                    videoCursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATE_TAKEN)
+
+                val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
+                do {
+                    val id = videoCursor.getLong(idColumn)
+                    val dateTaken = videoCursor.getLong(dateTakenColumn)
+                    val path =
+                        videoCursor.getString(videoCursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA))
+                    val imageUri =
+                        ContentUris.withAppendedId(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, id)
+
+                    val formattedDate = if (dateTaken == 0L) {
+                        dateFormat.format(getDateModified(path))
+                    } else {
+                        dateFormat.format(dateTaken)
+                    }
+
+                    imageList.add(ImageData(imageUri, formattedDate,true))
+                } while (videoCursor.moveToNext())
+            }
+            videoCursor.close()
         }
 
         return imageList
