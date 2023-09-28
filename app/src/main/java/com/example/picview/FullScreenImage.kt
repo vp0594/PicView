@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.example.picview.databinding.ActivityFullScreenImageBinding
@@ -58,6 +59,12 @@ class FullScreenImage : AppCompatActivity(),
         currentPosition = intent.getIntExtra("CurrentPosition", 0)
 
         binding.fullScreenViewPager.setCurrentItem(currentPosition, false)
+        if(allPhotoList[currentPosition].isVideo){
+            VideoActionFragment.binding.root.visibility=View.VISIBLE
+        }
+        else{
+            VideoActionFragment.binding.root.visibility=View.GONE
+        }
 
         binding.fullScreenViewPager.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
@@ -66,6 +73,13 @@ class FullScreenImage : AppCompatActivity(),
 
                 TopActionFragment.binding.dateTextView.text =
                     allPhotoList[position].dateTake
+
+                if(allPhotoList[position].isVideo){
+                    VideoActionFragment.binding.root.visibility=View.VISIBLE
+                }
+                else{
+                    VideoActionFragment.binding.root.visibility=View.GONE
+                }
 
                 checkImageInFavorites(position)
             }

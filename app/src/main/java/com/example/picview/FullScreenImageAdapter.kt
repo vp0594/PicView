@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.picview.databinding.ImageSliderBinding
@@ -18,6 +19,7 @@ class FullScreenImageAdapter(
 ) : RecyclerView.Adapter<FullScreenImageAdapter.ViewHolder>() {
     class ViewHolder(binding: ImageSliderBinding) : RecyclerView.ViewHolder(binding.root) {
         val image = binding.sliderImageView
+        val video = binding.sliderVideoView
     }
 
     interface SideShowButtonClickListener {
@@ -35,7 +37,15 @@ class FullScreenImageAdapter(
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        Glide.with(context).load(imageList[position].mediaUri).into(holder.image)
+        if (imageList[position].isVideo) {
+            holder.image.visibility = View.GONE
+            holder.video.setVideoURI(imageList[position].mediaUri)
+            Toast.makeText(context, position.toString(), Toast.LENGTH_SHORT).show()
+        } else {
+            holder.image.visibility = View.VISIBLE
+            Glide.with(context).load(imageList[position].mediaUri).into(holder.image)
+        }
+
 
         holder.image.setOnClickListener {
 
