@@ -81,21 +81,25 @@ class AllPhotoFragment : Fragment() {
             null,
             videoSortBy
         )
-        var dateModified:Long
+        var dateModified: Long
         // Process image results
         if (imageCursor != null) {
             if (imageCursor.moveToFirst()) {
                 val idColumn = imageCursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
-                val dateTakenColumn = imageCursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_TAKEN)
-                val dateModifiedColumn = imageCursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_MODIFIED)
+                val dateTakenColumn =
+                    imageCursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_TAKEN)
+                val dateModifiedColumn =
+                    imageCursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_MODIFIED)
 
                 val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
 
                 do {
-                    val path = imageCursor.getString(imageCursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA))
+                    val path =
+                        imageCursor.getString(imageCursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA))
                     val id = imageCursor.getLong(idColumn)
                     val dateTaken = imageCursor.getLong(dateTakenColumn)
-                    val imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
+                    val imageUri =
+                        ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
                     dateModified = imageCursor.getLong(dateModifiedColumn)
 
                     val formattedDate = if (dateTaken == 0L) {
@@ -104,7 +108,7 @@ class AllPhotoFragment : Fragment() {
                         dateFormat.format(dateTaken)
                     }
 
-                    tempImageList.add(ImageData(imageUri, formattedDate,false))
+                    tempImageList.add(ImageData(imageUri, formattedDate, false))
                 } while (imageCursor.moveToNext())
             }
             imageCursor.close()
@@ -114,35 +118,35 @@ class AllPhotoFragment : Fragment() {
         if (videoCursor != null) {
             if (videoCursor.moveToFirst()) {
                 val idColumn = videoCursor.getColumnIndexOrThrow(MediaStore.Video.Media._ID)
-                val dateTakenColumn = videoCursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATE_TAKEN)
+                val dateTakenColumn =
+                    videoCursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATE_TAKEN)
 
                 val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
 
                 do {
-                    val path = videoCursor.getString(videoCursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA))
+                    val path =
+                        videoCursor.getString(videoCursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA))
                     val id = videoCursor.getLong(idColumn)
                     val dateTaken = videoCursor.getLong(dateTakenColumn)
-                    val videoUri = ContentUris.withAppendedId(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, id)
+                    val videoUri =
+                        ContentUris.withAppendedId(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, id)
 
                     val formattedDate = if (dateTaken == 0L) {
                         dateFormat.format(getDateModified(path))
                     } else {
                         dateFormat.format(dateTaken)
                     }
-
-                    tempImageList.add(ImageData(videoUri, formattedDate,true))
+                    tempImageList.add(ImageData(videoUri, formattedDate, true))
                 } while (videoCursor.moveToNext())
             }
             videoCursor.close()
         }
 
-        // Sort the combined list by date
-//        tempImageList.sortByDescending { it.dateTake }
+        //Sort the combined list by date
+        tempImageList.sortByDescending { it.dateTake }
 
         return tempImageList
     }
-
-
 
 
     override fun onDestroyView() {

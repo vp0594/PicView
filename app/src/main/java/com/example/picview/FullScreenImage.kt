@@ -78,8 +78,8 @@ class FullScreenImage : AppCompatActivity(),
         checkImageInFavorites(currentPosition)
         if (!external) {
             BottomActionFragment.binding.favoritesButton.setOnClickListener {
-                if (dataBase.ifImageExits(allPhotoList[binding.fullScreenViewPager.currentItem].imageUri.toString())) {
-                    dataBase.removeFavourites(allPhotoList[binding.fullScreenViewPager.currentItem].imageUri.toString())
+                if (dataBase.ifImageExits(allPhotoList[binding.fullScreenViewPager.currentItem].mediaUri.toString())) {
+                    dataBase.removeFavourites(allPhotoList[binding.fullScreenViewPager.currentItem].mediaUri.toString())
                     BottomActionFragment.binding.favoritesButton.setImageResource(R.drawable.ic_favorite_border)
                 } else {
                     dataBase.addFavourites(allPhotoList[binding.fullScreenViewPager.currentItem])
@@ -94,7 +94,7 @@ class FullScreenImage : AppCompatActivity(),
             shareIntent.type = "image/*"
             shareIntent.putExtra(
                 Intent.EXTRA_STREAM,
-                allPhotoList[binding.fullScreenViewPager.currentItem].imageUri
+                allPhotoList[binding.fullScreenViewPager.currentItem].mediaUri
             )
             startActivity(Intent.createChooser(shareIntent, "Share Image"))
         }
@@ -138,7 +138,7 @@ class FullScreenImage : AppCompatActivity(),
     }
 
     fun checkImageInFavorites(position: Int) {
-        if (dataBase.ifImageExits(allPhotoList[position].imageUri.toString())) {
+        if (dataBase.ifImageExits(allPhotoList[position].mediaUri.toString())) {
             BottomActionFragment.binding.favoritesButton.setImageResource(R.drawable.ic_favorite_filled)
         } else {
             BottomActionFragment.binding.favoritesButton.setImageResource(R.drawable.ic_favorite_border)

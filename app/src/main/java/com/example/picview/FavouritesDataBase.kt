@@ -31,7 +31,7 @@ class FavouritesDataBase(context: Context) :
     fun addFavourites(imageData: ImageData) {
         val values = ContentValues()
 
-        values.put(imageUris, imageData.imageUri.toString())
+        values.put(imageUris, imageData.mediaUri.toString())
         values.put(dateTaken, imageData.dateTake)
 
         val db = this.writableDatabase

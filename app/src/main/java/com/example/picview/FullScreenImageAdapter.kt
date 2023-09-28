@@ -35,7 +35,7 @@ class FullScreenImageAdapter(
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        Glide.with(context).load(imageList[position].imageUri).into(holder.image)
+        Glide.with(context).load(imageList[position].mediaUri).into(holder.image)
 
         holder.image.setOnClickListener {
 
