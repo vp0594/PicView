@@ -43,16 +43,9 @@ class FullScreenImageAdapter(
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (imageList[position].isVideo) {
-            holder.image.visibility = View.GONE
-            holder.video.setVideoURI(imageList[position].mediaUri)
 
-            videoActionListener.showVideoAction()
-        } else {
-            holder.image.visibility = View.VISIBLE
-            Glide.with(context).load(imageList[position].mediaUri).into(holder.image)
-            videoActionListener.hideVideoAction()
-        }
+        holder.image.visibility = View.VISIBLE
+        Glide.with(context).load(imageList[position].mediaUri).into(holder.image)
 
         VideoActionFragment.binding.playPauseButton.setOnClickListener {
             holder.video.start()
