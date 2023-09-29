@@ -4,13 +4,15 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.example.picview.databinding.ActivityFullScreenImageBinding
 import kotlin.system.exitProcess
 
 class FullScreenImage : AppCompatActivity(),
-    FullScreenImageAdapter.SideShowButtonClickListener {
+    FullScreenImageAdapter.SideShowButtonClickListener, FullScreenImageAdapter.VideoActionListener {
 
     private lateinit var binding: ActivityFullScreenImageBinding
     private lateinit var fullScreenImageAdapter: FullScreenImageAdapter
@@ -42,7 +44,7 @@ class FullScreenImage : AppCompatActivity(),
         dataBase = FavouritesDataBase(this)
 
         allPhotoList = if (external) {
-            allPhotoList.add(ImageData(contentUri, "",false))
+            allPhotoList.add(ImageData(contentUri, "", false))
             allPhotoList
         } else if (intent.getStringExtra("from") == "AllPhotos") {
             AllPhotoFragment.imageList
@@ -53,11 +55,12 @@ class FullScreenImage : AppCompatActivity(),
         }
 
         fullScreenImageAdapter =
-            FullScreenImageAdapter(applicationContext, allPhotoList, this)
+            FullScreenImageAdapter(applicationContext, allPhotoList, this, this)
         binding.fullScreenViewPager.adapter = fullScreenImageAdapter
         currentPosition = intent.getIntExtra("CurrentPosition", 0)
 
         binding.fullScreenViewPager.setCurrentItem(currentPosition, false)
+
 
         binding.fullScreenViewPager.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
@@ -67,15 +70,27 @@ class FullScreenImage : AppCompatActivity(),
                 TopActionFragment.binding.dateTextView.text =
                     allPhotoList[position].dateTake
 
+                checkVideo(position)
                 checkImageInFavorites(position)
+                currentPosition = position
             }
         })
 
+
+    }
+
+    private fun checkVideo(position: Int) {
+        if (allPhotoList[position].isVideo) {
+            showVideoAction()
+        } else {
+            hideVideoAction()
+        }
     }
 
     override fun onStart() {
         super.onStart()
         checkImageInFavorites(currentPosition)
+        checkVideo(currentPosition)
         if (!external) {
             BottomActionFragment.binding.favoritesButton.setOnClickListener {
                 if (dataBase.ifImageExits(allPhotoList[binding.fullScreenViewPager.currentItem].mediaUri.toString())) {
@@ -98,6 +113,8 @@ class FullScreenImage : AppCompatActivity(),
             )
             startActivity(Intent.createChooser(shareIntent, "Share Image"))
         }
+
+
     }
 
     private fun stopSlideshow() {
@@ -130,6 +147,7 @@ class FullScreenImage : AppCompatActivity(),
         stopSlideshow()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         super.onBackPressed()
         if (external) {
@@ -144,4 +162,47 @@ class FullScreenImage : AppCompatActivity(),
             BottomActionFragment.binding.favoritesButton.setImageResource(R.drawable.ic_favorite_border)
         }
     }
+
+    override fun hideVideoAction() {
+        VideoActionFragment.binding.root.visibility = View.GONE
+    }
+
+    override fun showVideoAction() {
+        VideoActionFragment.binding.root.visibility = View.VISIBLE
+    }
+
+    override fun playPauseVideo(holder: FullScreenImageAdapter.ViewHolder) {
+        if (holder.video.isPlaying) {
+            holder.image.visibility = View.VISIBLE
+            holder.video.visibility = View.GONE
+
+            VideoActionFragment.binding.playPauseButton.setImageResource(R.drawable.ic_video)
+            holder.video.stopPlayback()
+
+            BottomActionFragment.binding.root.visibility = View.VISIBLE
+            TopActionFragment.binding.root.visibility = View.VISIBLE
+
+            Toast.makeText(applicationContext, "pause", Toast.LENGTH_SHORT).show()
+        } else {
+
+            holder.image.visibility = View.GONE
+            holder.video.visibility = View.VISIBLE
+
+            BottomActionFragment.binding.root.visibility = View.GONE
+            TopActionFragment.binding.root.visibility = View.GONE
+
+            holder.video.setVideoURI(allPhotoList[currentPosition].mediaUri)
+            Toast.makeText(applicationContext, currentPosition.toString(), Toast.LENGTH_SHORT).show()
+            VideoActionFragment.binding.playPauseButton.setImageResource(R.drawable.ic_pause)
+            holder.video.start()
+
+
+            Toast.makeText(
+                applicationContext,
+                "play CP" + currentPosition.toString(),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
 }

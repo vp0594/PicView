@@ -5,7 +5,6 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.picview.databinding.ItemRawBinding
@@ -31,9 +30,13 @@ class AllPhotoAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (imageList[position].isVideo)
+        if (imageList[position].isVideo) {
             holder.videoIcon.visibility = View.VISIBLE
-        Glide.with(context).load(imageList[position].mediaUri).into(holder.image)
+            Glide.with(context).load(imageList[position].mediaUri).into(holder.image)
+        } else {
+            holder.videoIcon.visibility = View.GONE
+            Glide.with(context).load(imageList[position].mediaUri).into(holder.image)
+        }
 
 //        holder.itemView.setOnLongClickListener {
 //            //set all checkbox visibility for all images
@@ -43,7 +46,6 @@ class AllPhotoAdapter(
 
         holder.itemView.setOnClickListener {
             val intent = Intent(context, FullScreenImage::class.java)
-            Toast.makeText(context,imageList[position].dateTake.toString() + imageList[position].isVideo.toString(), Toast.LENGTH_SHORT).show()
             intent.putExtra("CurrentPosition", position)
             intent.putExtra("from", from)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.picview.databinding.ImageSliderBinding
@@ -14,15 +15,23 @@ import com.example.picview.databinding.ImageSliderBinding
 class FullScreenImageAdapter(
     private val context: Context,
     private val imageList: ArrayList<ImageData>,
-    private val sideShowClickListener: SideShowButtonClickListener
+    private val sideShowClickListener: SideShowButtonClickListener,
+    private val videoActionListener: VideoActionListener
 ) : RecyclerView.Adapter<FullScreenImageAdapter.ViewHolder>() {
     class ViewHolder(binding: ImageSliderBinding) : RecyclerView.ViewHolder(binding.root) {
         val image = binding.sliderImageView
+        val video = binding.sliderVideoView
     }
 
     interface SideShowButtonClickListener {
         fun onSideShowButtonClick(position: Int)
         fun offSideShowButtonClick()
+    }
+
+    interface VideoActionListener {
+        fun hideVideoAction()
+        fun showVideoAction()
+        fun playPauseVideo(holder: ViewHolder)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -35,7 +44,15 @@ class FullScreenImageAdapter(
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+        holder.image.visibility = View.VISIBLE
         Glide.with(context).load(imageList[position].mediaUri).into(holder.image)
+
+        VideoActionFragment.binding.playPauseButton.setOnClickListener {
+            BottomActionFragment.binding.root.visibility = View.GONE
+            TopActionFragment.binding.root.visibility = View.GONE
+            videoActionListener.playPauseVideo(holder)
+        }
 
         holder.image.setOnClickListener {
 
