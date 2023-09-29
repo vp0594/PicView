@@ -61,7 +61,6 @@ class FullScreenImage : AppCompatActivity(),
 
         binding.fullScreenViewPager.setCurrentItem(currentPosition, false)
 
-
         binding.fullScreenViewPager.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
@@ -73,11 +72,16 @@ class FullScreenImage : AppCompatActivity(),
                 checkVideo(position)
                 checkImageInFavorites(position)
                 currentPosition = position
+
+
+//                binding.fullScreenViewPager.adapter = fullScreenImageAdapter
+//                binding.fullScreenViewPager.setCurrentItem(currentPosition, false)
             }
         })
 
 
     }
+
 
     private fun checkVideo(position: Int) {
         if (allPhotoList[position].isVideo) {
@@ -192,9 +196,12 @@ class FullScreenImage : AppCompatActivity(),
             TopActionFragment.binding.root.visibility = View.GONE
 
             holder.video.setVideoURI(allPhotoList[currentPosition].mediaUri)
-            Toast.makeText(applicationContext, currentPosition.toString(), Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, currentPosition.toString(), Toast.LENGTH_SHORT)
+                .show()
             VideoActionFragment.binding.playPauseButton.setImageResource(R.drawable.ic_pause)
+
             holder.video.start()
+
 
 
             Toast.makeText(
