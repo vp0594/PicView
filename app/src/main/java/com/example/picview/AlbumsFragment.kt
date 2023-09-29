@@ -30,7 +30,7 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         _binding = FragmentAlbumsBinding.inflate(inflater, container, false)
 
@@ -134,102 +134,66 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
     }
 
     private fun getImageList(folderName: String): ArrayList<ImageData> {
-        val imageList = ArrayList<ImageData>()
+        val tempMediaList = ArrayList<ImageData>()
+
+        //Querying for images and videos
         val projection = arrayOf(
-            MediaStore.Images.Media._ID,
-            MediaStore.Images.Media.DATE_TAKEN,
-            MediaStore.Images.Media.DATA
+            MediaStore.Files.FileColumns._ID,
+            MediaStore.Files.FileColumns.DATA,
+            MediaStore.Files.FileColumns.DATE_TAKEN,
+            MediaStore.Files.FileColumns.MEDIA_TYPE,
         )
 
-        val selection = "${MediaStore.Images.Media.BUCKET_DISPLAY_NAME} = ?"
+        val selection = "${MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME} = ? AND ${MediaStore.Files.FileColumns.MEDIA_TYPE} IN (?,?) "
 
-        val selectionArgs = arrayOf(folderName)
+        val selectionArgs = arrayOf(folderName, MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString(), MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString())
 
-        val sortOrder = "${MediaStore.Images.Media.DATE_TAKEN} DESC"
+        val sortBy = "${MediaStore.Files.FileColumns.DATE_ADDED} DESC"
+
+        val queryUri = MediaStore.Files.getContentUri("external")
 
         val cursor = requireContext().contentResolver.query(
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            queryUri,
             projection,
             selection,
             selectionArgs,
-            sortOrder
+            sortBy
         )
 
-        if (cursor != null) {
-            if (cursor.moveToNext()) {
-                val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
-                val dateTakenColumn =
-                    cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_TAKEN)
+        val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
 
-                val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
-                do {
-                    val id = cursor.getLong(idColumn)
-                    val dateTaken = cursor.getLong(dateTakenColumn)
-                    val path =
-                        cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA))
-                    val imageUri =
-                        ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
+        if(cursor != null && cursor.moveToFirst()) {
 
-                    val formattedDate = if (dateTaken == 0L) {
-                        dateFormat.format(getDateModified(path))
-                    } else {
-                        dateFormat.format(dateTaken)
-                    }
+            val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns._ID)
+            val pathColumn = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA)
+            val dateTakenColumn = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATE_TAKEN)
+            val mediaTypeColumn = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.MEDIA_TYPE)
 
-                    imageList.add(ImageData(imageUri, formattedDate,false))
-                } while (cursor.moveToNext())
-            }
-            cursor.close()
+            do {
+
+                val id = cursor.getLong(idColumn)
+                val path = cursor.getString(pathColumn)
+                val dateTaken = cursor.getLong(dateTakenColumn)
+                val mediaType = cursor.getString(mediaTypeColumn)
+
+                val mediaUri = ContentUris.withAppendedId(queryUri,id)
+
+                val isVideo = mediaType == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString()
+
+                val formattedDate = if(dateTaken != 0L) {
+                    dateFormat.format(dateTaken)
+                } else {
+                    dateFormat.format(getDateModified(path))
+                }
+                val mediaItem = ImageData(mediaUri,formattedDate,isVideo)
+
+                tempMediaList.add(mediaItem)
+
+            } while(cursor.moveToNext())
         }
+        cursor?.close()
 
-        val videoProjection = arrayOf(
-            MediaStore.Video.Media._ID,
-            MediaStore.Video.Media.DATE_TAKEN,
-            MediaStore.Video.Media.DATA
-        )
-
-        val videoSelection = "${MediaStore.Video.Media.BUCKET_DISPLAY_NAME} = ?"
-
-        val videoSelectionArgs = arrayOf(folderName)
-
-        val videoSortOrder = "${MediaStore.Video.Media.DATE_TAKEN} DESC"
-
-        val videoCursor = requireContext().contentResolver.query(
-            MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-            videoProjection,
-            videoSelection,
-            videoSelectionArgs,
-            videoSortOrder
-        )
-
-        if (videoCursor != null) {
-            if (videoCursor.moveToNext()) {
-                val idColumn = videoCursor.getColumnIndexOrThrow(MediaStore.Video.Media._ID)
-                val dateTakenColumn =
-                    videoCursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATE_TAKEN)
-
-                val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
-                do {
-                    val id = videoCursor.getLong(idColumn)
-                    val dateTaken = videoCursor.getLong(dateTakenColumn)
-                    val path =
-                        videoCursor.getString(videoCursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA))
-                    val imageUri =
-                        ContentUris.withAppendedId(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, id)
-
-                    val formattedDate = if (dateTaken == 0L) {
-                        dateFormat.format(getDateModified(path))
-                    } else {
-                        dateFormat.format(dateTaken)
-                    }
-
-                    imageList.add(ImageData(imageUri, formattedDate,true))
-                } while (videoCursor.moveToNext())
-            }
-            videoCursor.close()
-        }
-
-        return imageList
+        return tempMediaList
     }
 
     private fun getDateModified(path: String): Long {
