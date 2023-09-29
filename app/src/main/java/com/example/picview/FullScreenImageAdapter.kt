@@ -49,6 +49,8 @@ class FullScreenImageAdapter(
         Glide.with(context).load(imageList[position].mediaUri).into(holder.image)
 
         VideoActionFragment.binding.playPauseButton.setOnClickListener {
+            BottomActionFragment.binding.root.visibility = View.GONE
+            TopActionFragment.binding.root.visibility = View.GONE
             videoActionListener.playPauseVideo(holder)
         }
 

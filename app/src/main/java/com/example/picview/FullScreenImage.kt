@@ -173,15 +173,26 @@ class FullScreenImage : AppCompatActivity(),
         if (holder.video.isPlaying) {
             holder.image.visibility = View.VISIBLE
             holder.video.visibility = View.GONE
-            VideoActionFragment.binding.root.visibility = View.VISIBLE
+
+            VideoActionFragment.binding.playPauseButton.setImageResource(R.drawable.ic_video)
             holder.video.stopPlayback()
+
+            BottomActionFragment.binding.root.visibility = View.VISIBLE
+            TopActionFragment.binding.root.visibility = View.VISIBLE
+
             Toast.makeText(applicationContext, "pause", Toast.LENGTH_SHORT).show()
         } else {
             holder.image.visibility = View.GONE
             holder.video.visibility = View.VISIBLE
+
+            BottomActionFragment.binding.root.visibility = View.GONE
+            TopActionFragment.binding.root.visibility = View.GONE
+
             holder.video.setVideoURI(allPhotoList[currentPosition].mediaUri)
-            VideoActionFragment.binding.root.visibility = View.GONE
+            VideoActionFragment.binding.playPauseButton.setImageResource(R.drawable.ic_pause)
             holder.video.start()
+
+
             Toast.makeText(applicationContext, "play", Toast.LENGTH_SHORT).show()
         }
     }
