@@ -69,8 +69,10 @@ class FullScreenImage : AppCompatActivity(),
 
                 TopActionFragment.binding.dateTextView.text =
                     allPhotoList[position].dateTake
+
                 checkVideo(position)
                 checkImageInFavorites(position)
+                currentPosition = position
             }
         })
 
@@ -182,6 +184,7 @@ class FullScreenImage : AppCompatActivity(),
 
             Toast.makeText(applicationContext, "pause", Toast.LENGTH_SHORT).show()
         } else {
+
             holder.image.visibility = View.GONE
             holder.video.visibility = View.VISIBLE
 
@@ -189,11 +192,17 @@ class FullScreenImage : AppCompatActivity(),
             TopActionFragment.binding.root.visibility = View.GONE
 
             holder.video.setVideoURI(allPhotoList[currentPosition].mediaUri)
+            Toast.makeText(applicationContext, currentPosition.toString(), Toast.LENGTH_SHORT).show()
             VideoActionFragment.binding.playPauseButton.setImageResource(R.drawable.ic_pause)
             holder.video.start()
 
 
-            Toast.makeText(applicationContext, "play", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                applicationContext,
+                "play CP" + currentPosition.toString(),
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
+
 }
