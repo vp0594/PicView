@@ -31,6 +31,7 @@ class FullScreenImageAdapter(
     interface VideoActionListener {
         fun hideVideoAction()
         fun showVideoAction()
+        fun playPauseVideo(holder: ViewHolder)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -48,8 +49,7 @@ class FullScreenImageAdapter(
         Glide.with(context).load(imageList[position].mediaUri).into(holder.image)
 
         VideoActionFragment.binding.playPauseButton.setOnClickListener {
-            holder.video.start()
-            Toast.makeText(context, "yes" + position.toString(), Toast.LENGTH_SHORT).show()
+            videoActionListener.playPauseVideo(holder)
         }
 
         holder.image.setOnClickListener {

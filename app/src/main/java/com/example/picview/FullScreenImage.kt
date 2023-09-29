@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.example.picview.databinding.ActivityFullScreenImageBinding
@@ -111,6 +112,7 @@ class FullScreenImage : AppCompatActivity(),
             startActivity(Intent.createChooser(shareIntent, "Share Image"))
         }
 
+
     }
 
     private fun stopSlideshow() {
@@ -143,6 +145,7 @@ class FullScreenImage : AppCompatActivity(),
         stopSlideshow()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         super.onBackPressed()
         if (external) {
@@ -164,5 +167,22 @@ class FullScreenImage : AppCompatActivity(),
 
     override fun showVideoAction() {
         VideoActionFragment.binding.root.visibility = View.VISIBLE
+    }
+
+    override fun playPauseVideo(holder: FullScreenImageAdapter.ViewHolder) {
+        if (holder.video.isPlaying) {
+            holder.image.visibility = View.VISIBLE
+            holder.video.visibility = View.GONE
+            VideoActionFragment.binding.root.visibility = View.VISIBLE
+            holder.video.stopPlayback()
+            Toast.makeText(applicationContext, "pause", Toast.LENGTH_SHORT).show()
+        } else {
+            holder.image.visibility = View.GONE
+            holder.video.visibility = View.VISIBLE
+            holder.video.setVideoURI(allPhotoList[currentPosition].mediaUri)
+            VideoActionFragment.binding.root.visibility = View.GONE
+            holder.video.start()
+            Toast.makeText(applicationContext, "play", Toast.LENGTH_SHORT).show()
+        }
     }
 }
