@@ -13,7 +13,7 @@ class TabLayoutAdapter(fm: FragmentManager, lifecycle: Lifecycle) :
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> AllPhotoFragment()
+            0 -> AllMediaFragment()
             1 -> AlbumsFragment()
             else -> {
                 throw IllegalArgumentException("Invalid Position")

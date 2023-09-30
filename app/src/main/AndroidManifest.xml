@@ -22,10 +22,10 @@
             android:name=".FullScreenVideo"
             android:exported="false" />
         <activity
-            android:name=".AlbumImages"
+            android:name=".AlbumMedia"
             android:exported="false" />
         <activity
-            android:name=".FullScreenImage"
+            android:name=".FullScreenMedia"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

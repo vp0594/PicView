@@ -10,11 +10,11 @@ import com.bumptech.glide.Glide
 import com.example.picview.databinding.ItemRawBinding
 
 
-class AllPhotoAdapter(
+class AllMediaAdapter(
     private val context: Context,
-    private val imageList: ArrayList<ImageData>,
+    private val mediaList: ArrayList<MediaData>,
     private val from: String
-) : RecyclerView.Adapter<AllPhotoAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<AllMediaAdapter.ViewHolder>() {
 
     class ViewHolder(binding: ItemRawBinding) : RecyclerView.ViewHolder(binding.root) {
         val image = binding.allPhotoImageView
@@ -26,16 +26,16 @@ class AllPhotoAdapter(
     }
 
     override fun getItemCount(): Int {
-        return imageList.size
+        return mediaList.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (imageList[position].isVideo) {
+        if (mediaList[position].isVideo) {
             holder.videoIcon.visibility = View.VISIBLE
-            Glide.with(context).load(imageList[position].mediaUri).into(holder.image)
+            Glide.with(context).load(mediaList[position].mediaUri).into(holder.image)
         } else {
             holder.videoIcon.visibility = View.GONE
-            Glide.with(context).load(imageList[position].mediaUri).into(holder.image)
+            Glide.with(context).load(mediaList[position].mediaUri).into(holder.image)
         }
 
 //        holder.itemView.setOnLongClickListener {
@@ -45,7 +45,7 @@ class AllPhotoAdapter(
 //        }
 
         holder.itemView.setOnClickListener {
-            val intent = Intent(context, FullScreenImage::class.java)
+            val intent = Intent(context, FullScreenMedia::class.java)
             intent.putExtra("CurrentPosition", position)
             intent.putExtra("from", from)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

@@ -4,30 +4,30 @@ import android.os.Bundle
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.picview.databinding.ActivityAlbumImagesBinding
+import com.example.picview.databinding.ActivityAlbumMediaBinding
 
-class AlbumImages : AppCompatActivity() {
+class AlbumMedia : AppCompatActivity() {
 
-    private lateinit var binding: ActivityAlbumImagesBinding
+    private lateinit var binding: ActivityAlbumMediaBinding
     private lateinit var dataBase: FavouritesDataBase
     private var from: String = ""
-    private lateinit var imageList: ArrayList<ImageData>
+    private lateinit var mediaList: ArrayList<MediaData>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityAlbumImagesBinding.inflate(layoutInflater)
+        binding = ActivityAlbumMediaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         dataBase = FavouritesDataBase(this)
 
 
         if (intent.getStringExtra("FolderName") == "UserFav") {
-            imageList = dataBase.getFavouritesImageList()
+            mediaList = dataBase.getFavouritesImageList()
             from = "Fav"
             binding.albumsTextView.text = "Favourites"
 
         } else {
-            imageList = AlbumsFragment.imageList
+            mediaList = AlbumsFragment.mediaList
             from = "Albums"
             binding.albumsTextView.text = intent.getStringExtra("FolderName")
         }
@@ -38,15 +38,15 @@ class AlbumImages : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         if (intent.getStringExtra("FolderName") == "UserFav") {
-            imageList = dataBase.getFavouritesImageList()
+            mediaList = dataBase.getFavouritesImageList()
         }
         setRecyclerview()
     }
 
     private fun setRecyclerview() {
-        val allPhotoAdapter =
-            AllPhotoAdapter(applicationContext, imageList, from)
+        val allMediaAdapter =
+            AllMediaAdapter(applicationContext, mediaList, from)
         binding.albumsImagesRecyclerView.layoutManager = GridLayoutManager(applicationContext, 4)
-        binding.albumsImagesRecyclerView.adapter = allPhotoAdapter
+        binding.albumsImagesRecyclerView.adapter = allMediaAdapter
     }
 }

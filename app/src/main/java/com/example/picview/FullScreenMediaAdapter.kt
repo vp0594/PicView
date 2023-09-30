@@ -9,15 +9,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.picview.databinding.ImageSliderBinding
+import com.example.picview.databinding.MediaSliderBinding
 
-class FullScreenImageAdapter(
+class FullScreenMediaAdapter(
     private val context: Context,
-    private val imageList: ArrayList<ImageData>,
+    private val mediaList: ArrayList<MediaData>,
     private val sideShowClickListener: SideShowButtonClickListener,
     private val videoActionListener: VideoActionListener
-) : RecyclerView.Adapter<FullScreenImageAdapter.ViewHolder>() {
-    class ViewHolder(binding: ImageSliderBinding) : RecyclerView.ViewHolder(binding.root) {
+) : RecyclerView.Adapter<FullScreenMediaAdapter.ViewHolder>() {
+    class ViewHolder(binding: MediaSliderBinding) : RecyclerView.ViewHolder(binding.root) {
         val image = binding.sliderImageView
         val video = binding.sliderVideoView
     }
@@ -35,24 +35,24 @@ class FullScreenImageAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(ImageSliderBinding.inflate(LayoutInflater.from(context), parent, false))
+        return ViewHolder(MediaSliderBinding.inflate(LayoutInflater.from(context), parent, false))
     }
 
     override fun getItemCount(): Int {
-        return imageList.size
+        return mediaList.size
     }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        if(imageList[position].isVideo){
+        if(mediaList[position].isVideo){
             videoActionListener.setMediaController(holder)
         }
 
         holder.image.visibility = View.VISIBLE
-        Glide.with(context).load(imageList[position].mediaUri).into(holder.image)
+        Glide.with(context).load(mediaList[position].mediaUri).into(holder.image)
 
-        TopActionFragment.binding.dateTextView.text = imageList[position].dateTake
+        TopActionFragment.binding.dateTextView.text = mediaList[position].dateTake
 
         VideoActionFragment.binding.playPauseButton.setOnClickListener {
             BottomActionFragment.binding.root.visibility = View.GONE
@@ -62,9 +62,9 @@ class FullScreenImageAdapter(
 
         holder.image.setOnClickListener {
 
-            if (FullScreenImage.slideShow) {
+            if (FullScreenMedia.slideShow) {
                 sideShowClickListener.offSideShowButtonClick()
-                FullScreenImage.slideShow = false
+                FullScreenMedia.slideShow = false
                 BottomActionFragment.binding.root.visibility = View.VISIBLE
                 TopActionFragment.binding.root.visibility = View.VISIBLE
                 return@setOnClickListener
@@ -80,7 +80,7 @@ class FullScreenImageAdapter(
         }
 
         BottomActionFragment.binding.sideShowButton.setOnClickListener {
-            FullScreenImage.slideShow = true
+            FullScreenMedia.slideShow = true
             BottomActionFragment.binding.root.visibility = View.GONE
             TopActionFragment.binding.root.visibility = View.GONE
             sideShowClickListener.onSideShowButtonClick(position)

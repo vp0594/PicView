@@ -9,19 +9,19 @@ import android.widget.MediaController
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
-import com.example.picview.databinding.ActivityFullScreenImageBinding
+import com.example.picview.databinding.ActivityFullScreenMediaBinding
 import kotlin.system.exitProcess
 
-class FullScreenImage : AppCompatActivity(),
-    FullScreenImageAdapter.SideShowButtonClickListener, FullScreenImageAdapter.VideoActionListener {
+class FullScreenMedia : AppCompatActivity(),
+    FullScreenMediaAdapter.SideShowButtonClickListener, FullScreenMediaAdapter.VideoActionListener {
 
-    private lateinit var binding: ActivityFullScreenImageBinding
-    private lateinit var fullScreenImageAdapter: FullScreenImageAdapter
+    private lateinit var binding: ActivityFullScreenMediaBinding
+    private lateinit var fullScreenMediaAdapter: FullScreenMediaAdapter
     private lateinit var dataBase: FavouritesDataBase
     private var currentPosition = 0
 
     private val slideshowHandler = Handler()
-    private var allPhotoList = ArrayList<ImageData>()
+    private var mediaList = ArrayList<MediaData>()
 
     companion object {
         var slideShow = false
@@ -38,26 +38,26 @@ class FullScreenImage : AppCompatActivity(),
         }
 
         super.onCreate(savedInstanceState)
-        binding = ActivityFullScreenImageBinding.inflate(layoutInflater)
+        binding = ActivityFullScreenMediaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
 
         dataBase = FavouritesDataBase(this)
 
-        allPhotoList = if (external) {
-            allPhotoList.add(ImageData(contentUri, "", false))
-            allPhotoList
+        mediaList = if (external) {
+            mediaList.add(MediaData(contentUri, "", false))
+            mediaList
         } else if (intent.getStringExtra("from") == "AllPhotos") {
-            AllPhotoFragment.imageList
+            AllMediaFragment.mediaList
         } else if (intent.getStringExtra("from") == "Albums") {
-            AlbumsFragment.imageList
+            AlbumsFragment.mediaList
         } else {
             dataBase.getFavouritesImageList()
         }
 
-        fullScreenImageAdapter =
-            FullScreenImageAdapter(applicationContext, allPhotoList, this, this)
-        binding.fullScreenViewPager.adapter = fullScreenImageAdapter
+        fullScreenMediaAdapter =
+            FullScreenMediaAdapter(applicationContext, mediaList, this, this)
+        binding.fullScreenViewPager.adapter = fullScreenMediaAdapter
         currentPosition = intent.getIntExtra("CurrentPosition", 0)
 
         binding.fullScreenViewPager.setCurrentItem(currentPosition, false)
@@ -68,7 +68,7 @@ class FullScreenImage : AppCompatActivity(),
                 super.onPageSelected(position)
 
                 TopActionFragment.binding.dateTextView.text =
-                    allPhotoList[position].dateTake
+                    mediaList[position].dateTake
 
                 checkVideo(position)
                 checkImageInFavorites(position)
@@ -86,7 +86,7 @@ class FullScreenImage : AppCompatActivity(),
 
 
     private fun checkVideo(position: Int) {
-        if (allPhotoList[position].isVideo) {
+        if (mediaList[position].isVideo) {
             showVideoAction()
         } else {
             hideVideoAction()
@@ -99,11 +99,11 @@ class FullScreenImage : AppCompatActivity(),
         checkVideo(currentPosition)
         if (!external) {
             BottomActionFragment.binding.favoritesButton.setOnClickListener {
-                if (dataBase.ifImageExits(allPhotoList[binding.fullScreenViewPager.currentItem].mediaUri.toString())) {
-                    dataBase.removeFavourites(allPhotoList[binding.fullScreenViewPager.currentItem].mediaUri.toString())
+                if (dataBase.ifImageExits(mediaList[binding.fullScreenViewPager.currentItem].mediaUri.toString())) {
+                    dataBase.removeFavourites(mediaList[binding.fullScreenViewPager.currentItem].mediaUri.toString())
                     BottomActionFragment.binding.favoritesButton.setImageResource(R.drawable.ic_favorite_border)
                 } else {
-                    dataBase.addFavourites(allPhotoList[binding.fullScreenViewPager.currentItem])
+                    dataBase.addFavourites(mediaList[binding.fullScreenViewPager.currentItem])
                     BottomActionFragment.binding.favoritesButton.setImageResource(R.drawable.ic_favorite_filled)
                 }
             }
@@ -115,7 +115,7 @@ class FullScreenImage : AppCompatActivity(),
             shareIntent.type = "image/*"
             shareIntent.putExtra(
                 Intent.EXTRA_STREAM,
-                allPhotoList[binding.fullScreenViewPager.currentItem].mediaUri
+                mediaList[binding.fullScreenViewPager.currentItem].mediaUri
             )
             startActivity(Intent.createChooser(shareIntent, "Share Image"))
         }
@@ -135,7 +135,7 @@ class FullScreenImage : AppCompatActivity(),
             override fun run() {
                 currentImagePosition++
 
-                if (currentImagePosition >= allPhotoList.size) {
+                if (currentImagePosition >= mediaList.size) {
                     currentImagePosition = 0
                 }
                 binding.fullScreenViewPager.setCurrentItem(currentImagePosition, true)
@@ -162,7 +162,7 @@ class FullScreenImage : AppCompatActivity(),
     }
 
     fun checkImageInFavorites(position: Int) {
-        if (dataBase.ifImageExits(allPhotoList[position].mediaUri.toString())) {
+        if (dataBase.ifImageExits(mediaList[position].mediaUri.toString())) {
             BottomActionFragment.binding.favoritesButton.setImageResource(R.drawable.ic_favorite_filled)
         } else {
             BottomActionFragment.binding.favoritesButton.setImageResource(R.drawable.ic_favorite_border)
@@ -177,7 +177,7 @@ class FullScreenImage : AppCompatActivity(),
         VideoActionFragment.binding.root.visibility = View.VISIBLE
     }
 
-    override fun playPauseVideo(holder: FullScreenImageAdapter.ViewHolder) {
+    override fun playPauseVideo(holder: FullScreenMediaAdapter.ViewHolder) {
         if (holder.video.isPlaying) {
             holder.image.visibility = View.VISIBLE
             holder.video.visibility = View.GONE
@@ -197,7 +197,7 @@ class FullScreenImage : AppCompatActivity(),
             BottomActionFragment.binding.root.visibility = View.GONE
             TopActionFragment.binding.root.visibility = View.GONE
 
-            holder.video.setVideoURI(allPhotoList[currentPosition].mediaUri)
+            holder.video.setVideoURI(mediaList[currentPosition].mediaUri)
             Toast.makeText(applicationContext, currentPosition.toString(), Toast.LENGTH_SHORT)
                 .show()
             VideoActionFragment.binding.playPauseButton.setImageResource(R.drawable.ic_pause)
@@ -216,7 +216,7 @@ class FullScreenImage : AppCompatActivity(),
         }
     }
 
-    override fun setMediaController(holder: FullScreenImageAdapter.ViewHolder) {
+    override fun setMediaController(holder: FullScreenMediaAdapter.ViewHolder) {
         val mediaController: MediaController = MediaController(this)
         mediaController.setAnchorView(holder.video)
         holder.video.setMediaController(mediaController)

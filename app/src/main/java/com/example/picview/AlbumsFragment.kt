@@ -24,7 +24,7 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
     private val albumsData = ArrayList<AlbumData>()
 
     companion object {
-        lateinit var imageList: ArrayList<ImageData>
+        lateinit var mediaList: ArrayList<MediaData>
         var s = false
     }
 
@@ -41,7 +41,7 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
         binding.albumsRecyclerView.adapter = albumsAdapter
 
         binding.favoritesButton.setOnClickListener {
-            val intent = Intent(requireContext(), AlbumImages::class.java)
+            val intent = Intent(requireContext(), AlbumMedia::class.java)
             intent.putExtra("FolderName", "UserFav")
             startActivity(intent)
         }
@@ -127,14 +127,14 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
 
 
     override fun onAlbumClick(folderName: String) {
-        imageList = getImageList(folderName)
-        val intent = Intent(requireContext(), AlbumImages::class.java)
+        mediaList = getMediaList(folderName)
+        val intent = Intent(requireContext(), AlbumMedia::class.java)
         intent.putExtra("FolderName", folderName)
         startActivity(intent)
     }
 
-    private fun getImageList(folderName: String): ArrayList<ImageData> {
-        val tempMediaList = ArrayList<ImageData>()
+    private fun getMediaList(folderName: String): ArrayList<MediaData> {
+        val tempMediaList = ArrayList<MediaData>()
 
         //Querying for images and videos
         val projection = arrayOf(
@@ -185,7 +185,7 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
                 } else {
                     dateFormat.format(getDateModified(path))
                 }
-                val mediaItem = ImageData(mediaUri,formattedDate,isVideo)
+                val mediaItem = MediaData(mediaUri,formattedDate,isVideo)
 
                 tempMediaList.add(mediaItem)
 

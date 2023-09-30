@@ -31,7 +31,7 @@ class AlbumsAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        Glide.with(context).load(albumsData[position].imageCover).into(holder.albumsCover)
+        Glide.with(context).load(albumsData[position].coverImage).into(holder.albumsCover)
         holder.albumsName.text = albumsData[position].folderName
 
         holder.itemView.setOnClickListener {

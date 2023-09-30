@@ -28,11 +28,11 @@ class FavouritesDataBase(context: Context) :
         onCreate(db)
     }
 
-    fun addFavourites(imageData: ImageData) {
+    fun addFavourites(mediaData: MediaData) {
         val values = ContentValues()
 
-        values.put(imageUris, imageData.mediaUri.toString())
-        values.put(dateTaken, imageData.dateTake)
+        values.put(imageUris, mediaData.mediaUri.toString())
+        values.put(dateTaken, mediaData.dateTake)
 
         val db = this.writableDatabase
         db.insert("Favourites", null, values)
@@ -63,8 +63,8 @@ class FavouritesDataBase(context: Context) :
         return false
     }
 
-    fun getFavouritesImageList(): ArrayList<ImageData> {
-        val tempImageList = ArrayList<ImageData>()
+    fun getFavouritesImageList(): ArrayList<MediaData> {
+        val tempImageList = ArrayList<MediaData>()
         val db = this.readableDatabase
         val query = "SELECT * FROM Favourites"
 
@@ -76,7 +76,7 @@ class FavouritesDataBase(context: Context) :
                 val formattedDate = cursor.getString(cursor.getColumnIndexOrThrow(dateTaken))
                 val imageUri = Uri.parse(imageUriStr)
 
-                tempImageList.add(ImageData(imageUri, formattedDate,false))
+                tempImageList.add(MediaData(imageUri, formattedDate,false))
             }
             cursor.close()
         }
