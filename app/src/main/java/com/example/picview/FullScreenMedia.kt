@@ -72,8 +72,11 @@ class FullScreenMedia : AppCompatActivity(),
 
                 checkVideo(position)
                 checkImageInFavorites(position)
+                VideoActionFragment.binding.playPauseButton.setImageResource(R.drawable.ic_video)
                 currentPosition = position
-
+                if(mediaList[currentPosition].isVideo){
+                    fullScreenMediaAdapter.notifyItemChanged(currentPosition)
+                }
                 //setMediaController(FullScreenImageAdapter.ViewHolder)
 
 //                binding.fullScreenViewPager.adapter = fullScreenImageAdapter
@@ -198,21 +201,9 @@ class FullScreenMedia : AppCompatActivity(),
             TopActionFragment.binding.root.visibility = View.GONE
 
             holder.video.setVideoURI(mediaList[currentPosition].mediaUri)
-            Toast.makeText(applicationContext, currentPosition.toString(), Toast.LENGTH_SHORT)
-                .show()
             VideoActionFragment.binding.playPauseButton.setImageResource(R.drawable.ic_pause)
 
             holder.video.start()
-
-//            val mediaController: MediaController = MediaController(this)
-//            mediaController.setAnchorView(holder.video)
-//            holder.video.setMediaController(mediaController)
-
-            Toast.makeText(
-                applicationContext,
-                "play CP" + currentPosition.toString(),
-                Toast.LENGTH_SHORT
-            ).show()
         }
     }
 
