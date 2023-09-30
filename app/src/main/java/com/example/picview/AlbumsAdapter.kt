@@ -15,6 +15,7 @@ class AlbumsAdapter(
     class ViewHolder(binding: AlbumsRawBinding) : RecyclerView.ViewHolder(binding.root) {
         val albumsCover = binding.albumsCoverImageView
         val albumsName = binding.albumsNameTextView
+        val albumsSize = binding.albumsSizeTextView
     }
 
     interface AlbumClickListener {
@@ -33,6 +34,7 @@ class AlbumsAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         Glide.with(context).load(albumsData[position].coverImage).into(holder.albumsCover)
         holder.albumsName.text = albumsData[position].folderName
+        //holder.albumsSize.text = albumsData.size.toString()
 
         holder.itemView.setOnClickListener {
             albumClickListener.onAlbumClick(albumsData[position].folderName)

@@ -19,6 +19,9 @@
         android:theme="@style/Base.Theme.PicView"
         tools:targetApi="33">
         <activity
+            android:name=".VideoPlayer"
+            android:exported="false" />
+        <activity
             android:name=".FullScreenVideo"
             android:exported="false" />
         <activity

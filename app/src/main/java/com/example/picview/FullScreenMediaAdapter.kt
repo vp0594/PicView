@@ -2,6 +2,7 @@ package com.example.picview
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.view.GestureDetector
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -45,9 +46,6 @@ class FullScreenMediaAdapter(
     @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        if(mediaList[position].isVideo){
-            videoActionListener.setMediaController(holder)
-        }
 
         holder.image.visibility = View.VISIBLE
         Glide.with(context).load(mediaList[position].mediaUri).into(holder.image)
@@ -55,11 +53,11 @@ class FullScreenMediaAdapter(
         TopActionFragment.binding.dateTextView.text = mediaList[position].dateTake
 
         VideoActionFragment.binding.playPauseButton.setOnClickListener {
-            BottomActionFragment.binding.root.visibility = View.GONE
-            TopActionFragment.binding.root.visibility = View.GONE
-            videoActionListener.playPauseVideo(holder)
+            val intent = Intent(context, VideoPlayer::class.java)
+            intent.putExtra("VideoUri", mediaList[position].mediaUri.toString())
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(intent)
         }
-
         holder.image.setOnClickListener {
 
             if (FullScreenMedia.slideShow) {
