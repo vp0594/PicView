@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import android.widget.MediaController
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
@@ -202,7 +203,9 @@ class FullScreenImage : AppCompatActivity(),
 
             holder.video.start()
 
-
+//            val mediaController: MediaController = MediaController(this)
+//            mediaController.setAnchorView(holder.video)
+//            holder.video.setMediaController(mediaController)
 
             Toast.makeText(
                 applicationContext,
