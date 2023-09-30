@@ -74,6 +74,7 @@ class FullScreenImage : AppCompatActivity(),
                 checkImageInFavorites(position)
                 currentPosition = position
 
+                //setMediaController(FullScreenImageAdapter.ViewHolder)
 
 //                binding.fullScreenViewPager.adapter = fullScreenImageAdapter
 //                binding.fullScreenViewPager.setCurrentItem(currentPosition, false)
@@ -213,6 +214,12 @@ class FullScreenImage : AppCompatActivity(),
                 Toast.LENGTH_SHORT
             ).show()
         }
+    }
+
+    override fun setMediaController(holder: FullScreenImageAdapter.ViewHolder) {
+        val mediaController: MediaController = MediaController(this)
+        mediaController.setAnchorView(holder.video)
+        holder.video.setMediaController(mediaController)
     }
 
 }

@@ -31,6 +31,7 @@ class FullScreenImageAdapter(
         fun hideVideoAction()
         fun showVideoAction()
         fun playPauseVideo(holder: ViewHolder)
+        fun setMediaController(holder: ViewHolder)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -43,6 +44,10 @@ class FullScreenImageAdapter(
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+        if(imageList[position].isVideo){
+            videoActionListener.setMediaController(holder)
+        }
 
         holder.image.visibility = View.VISIBLE
         Glide.with(context).load(imageList[position].mediaUri).into(holder.image)
