@@ -52,7 +52,7 @@ class FullScreenMedia : AppCompatActivity(),
         } else if (intent.getStringExtra("from") == "Albums") {
             AlbumsFragment.mediaList
         } else {
-            dataBase.getFavouritesImageList()
+            dataBase.getFavouritesMediaList()
         }
 
         fullScreenMediaAdapter =
@@ -102,7 +102,7 @@ class FullScreenMedia : AppCompatActivity(),
         checkVideo(currentPosition)
         if (!external) {
             BottomActionFragment.binding.favoritesButton.setOnClickListener {
-                if (dataBase.ifImageExits(mediaList[binding.fullScreenViewPager.currentItem].mediaUri.toString())) {
+                if (dataBase.ifMediaExits(mediaList[binding.fullScreenViewPager.currentItem].mediaUri.toString())) {
                     dataBase.removeFavourites(mediaList[binding.fullScreenViewPager.currentItem].mediaUri.toString())
                     BottomActionFragment.binding.favoritesButton.setImageResource(R.drawable.ic_favorite_border)
                 } else {
@@ -165,7 +165,7 @@ class FullScreenMedia : AppCompatActivity(),
     }
 
     fun checkImageInFavorites(position: Int) {
-        if (dataBase.ifImageExits(mediaList[position].mediaUri.toString())) {
+        if (dataBase.ifMediaExits(mediaList[position].mediaUri.toString())) {
             BottomActionFragment.binding.favoritesButton.setImageResource(R.drawable.ic_favorite_filled)
         } else {
             BottomActionFragment.binding.favoritesButton.setImageResource(R.drawable.ic_favorite_border)

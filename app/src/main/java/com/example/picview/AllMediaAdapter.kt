@@ -38,12 +38,6 @@ class AllMediaAdapter(
             Glide.with(context).load(mediaList[position].mediaUri).into(holder.image)
         }
 
-//        holder.itemView.setOnLongClickListener {
-//            //set all checkbox visibility for all images
-//            holder.checkBox.visibility = View.VISIBLE
-//            true
-//        }
-
         holder.itemView.setOnClickListener {
             val intent = Intent(context, FullScreenMedia::class.java)
             intent.putExtra("CurrentPosition", position)

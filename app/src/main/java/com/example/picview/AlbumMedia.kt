@@ -22,7 +22,7 @@ class AlbumMedia : AppCompatActivity() {
 
 
         if (intent.getStringExtra("FolderName") == "UserFav") {
-            mediaList = dataBase.getFavouritesImageList()
+            mediaList = dataBase.getFavouritesMediaList()
             from = "Fav"
             binding.albumsTextView.text = "Favourites"
 
@@ -38,7 +38,7 @@ class AlbumMedia : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         if (intent.getStringExtra("FolderName") == "UserFav") {
-            mediaList = dataBase.getFavouritesImageList()
+            mediaList = dataBase.getFavouritesMediaList()
         }
         setRecyclerview()
     }

@@ -5,21 +5,21 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.net.Uri
-import java.io.File
 
 class FavouritesDataBase(context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     companion object {
-        private const val DATABASE_NAME = "FavouriteImages"
+        private const val DATABASE_NAME = "FavouriteMedias"
         private const val DATABASE_VERSION = 1
 
-        const val imageUris = "imageUris"
+        const val mediaUris = "imageUris"
         const val dateTaken = "dateTaken"
+        const val isVideos = "false"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
         val query =
-            "CREATE TABLE IF NOT EXISTS Favourites($imageUris TEXT PRIMARY KEY,$dateTaken TEXT)"
+            "CREATE TABLE IF NOT EXISTS Favourites($mediaUris TEXT PRIMARY KEY,$dateTaken TEXT,$isVideos TEXT)"
         db?.execSQL(query)
     }
 
@@ -31,8 +31,9 @@ class FavouritesDataBase(context: Context) :
     fun addFavourites(mediaData: MediaData) {
         val values = ContentValues()
 
-        values.put(imageUris, mediaData.mediaUri.toString())
+        values.put(mediaUris, mediaData.mediaUri.toString())
         values.put(dateTaken, mediaData.dateTake)
+        values.put(isVideos, mediaData.isVideo.toString())
 
         val db = this.writableDatabase
         db.insert("Favourites", null, values)
@@ -40,22 +41,22 @@ class FavouritesDataBase(context: Context) :
         db.close()
     }
 
-    fun removeFavourites(imageUri: String) {
+    fun removeFavourites(mediaUri: String) {
         val db = this.writableDatabase
-        val query = "DELETE FROM Favourites WHERE $imageUris='$imageUri'"
+        val query = "DELETE FROM Favourites WHERE $mediaUris='$mediaUri'"
         db.execSQL(query)
 
     }
 
-    fun ifImageExits(imageUri: String): Boolean {
+    fun ifMediaExits(mediaUri: String): Boolean {
         val db = this.readableDatabase
-        val query = "SELECT $imageUris FROM Favourites WHERE $imageUris='$imageUri'"
+        val query = "SELECT $mediaUris FROM Favourites WHERE $mediaUris='$mediaUri'"
         val cursor = db.rawQuery(query, null)
         var value: String? = null
 
 
         if (cursor.moveToNext()) {
-            value = cursor.getString(cursor.getColumnIndexOrThrow(imageUris))
+            value = cursor.getString(cursor.getColumnIndexOrThrow(mediaUris))
         }
         cursor.close()
         if (value != null)
@@ -63,7 +64,7 @@ class FavouritesDataBase(context: Context) :
         return false
     }
 
-    fun getFavouritesImageList(): ArrayList<MediaData> {
+    fun getFavouritesMediaList(): ArrayList<MediaData> {
         val tempImageList = ArrayList<MediaData>()
         val db = this.readableDatabase
         val query = "SELECT * FROM Favourites"
@@ -72,11 +73,12 @@ class FavouritesDataBase(context: Context) :
 
         if (cursor != null) {
             while (cursor.moveToNext()) {
-                val imageUriStr = cursor.getString(cursor.getColumnIndexOrThrow(imageUris))
+                val imageUriStr = cursor.getString(cursor.getColumnIndexOrThrow(mediaUris))
                 val formattedDate = cursor.getString(cursor.getColumnIndexOrThrow(dateTaken))
-                val imageUri = Uri.parse(imageUriStr)
+                val isVideo:Boolean = cursor.getString(cursor.getColumnIndexOrThrow(isVideos)) != "false"
+                val mediaUri = Uri.parse(imageUriStr)
 
-                tempImageList.add(MediaData(imageUri, formattedDate,false))
+                tempImageList.add(MediaData(mediaUri, formattedDate, isVideo))
             }
             cursor.close()
         }
@@ -84,8 +86,5 @@ class FavouritesDataBase(context: Context) :
         return tempImageList
     }
 
-
-    private fun getDateModified(path: String): Long {
-        return File(path).lastModified()
-    }
 }
+
