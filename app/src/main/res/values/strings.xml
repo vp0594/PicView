@@ -14,4 +14,6 @@
     <string name="Exit">Exit</string>
     <string name="nav_open">Menu Open</string>
     <string name="nav_close">Menu Close</string>
+    <string name="number_of_column">Enter Number Of Column</string>
+    <string name="gridColumnNumber">GridColumn</string>
 </resources>

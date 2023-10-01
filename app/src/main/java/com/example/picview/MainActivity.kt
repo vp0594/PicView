@@ -1,13 +1,18 @@
 package com.example.picview
 
 import android.Manifest
-import android.app.Activity
+import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.Window
+import android.widget.Button
+import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -21,6 +26,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import kotlin.system.exitProcess
 
 
+@Suppress("NAME_SHADOWING")
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -59,13 +65,44 @@ class MainActivity : AppCompatActivity() {
     private fun setUpNavItemClick() {
         binding.navView.setNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.setting -> startActivity(Intent(this@MainActivity, Setting::class.java))
+                R.id.gridColumn -> {
+                    val dialog = Dialog(this)
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                    dialog.setCancelable(false)
+                    dialog.setContentView(R.layout.setting_layout)
+                    dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+                    val sharedPreferences = getSharedPreferences("sharePref", MODE_PRIVATE)
+                    val editor = sharedPreferences.edit()
+
+                    val numberOfColumnEditText = dialog.findViewById<EditText>(R.id.columnCount)
+                    val yesButton = dialog.findViewById<Button>(R.id.yesColumn)
+                    val noButton = dialog.findViewById<Button>(R.id.noColumn)
+
+
+
+                    yesButton.setOnClickListener {
+                        val numberOfColumn: Int = numberOfColumnEditText.text.toString().toInt()
+                        editor.apply {
+                            putInt("Column", numberOfColumn)
+
+                        }.apply()
+                        dialog.dismiss()
+                    }
+
+                    noButton.setOnClickListener {
+                        dialog.dismiss()
+                    }
+                    dialog.show()
+
+                }
+
                 R.id.about -> startActivity(Intent(this@MainActivity, About::class.java))
                 R.id.exit -> {
                     val dialog = MaterialAlertDialogBuilder(this)
                     dialog.setTitle("Exit!").setCancelable(false).setMessage("Exit App??")
                         .setPositiveButton("Yes") { _: DialogInterface, _: Int ->
-                            val activity: MainActivity = MainActivity()
+                            val activity = MainActivity()
                             activity.finish()
                             // on below line we are exiting our activity
                             exitProcess(0)

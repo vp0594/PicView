@@ -2,10 +2,13 @@ package com.example.picview
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.picview.databinding.ItemRawBinding
@@ -40,14 +43,16 @@ class AllMediaAdapter(
             Glide.with(context).load(mediaList[position].mediaUri).into(holder.image)
         }
 
-        val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        val display = wm.defaultDisplay
+        val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val display = windowManager.defaultDisplay
 
         val width= display.width
-        val height= display.height
 
-        holder.image.minimumHeight = height
-        holder.image.minimumWidth = width
+        val sharedPreferences:SharedPreferences = context.getSharedPreferences("sharePref", AppCompatActivity.MODE_PRIVATE)
+        val numberOfColumn:Int = sharedPreferences.getInt("Column",3)
+
+        holder.image.minimumHeight = width/numberOfColumn
+        holder.image.minimumWidth = width/numberOfColumn
 
         holder.itemView.setOnClickListener {
             val intent = Intent(context, FullScreenMedia::class.java)

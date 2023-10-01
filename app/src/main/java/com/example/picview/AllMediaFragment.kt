@@ -2,15 +2,14 @@ package com.example.picview
 
 import android.content.ContentUris
 import android.content.Context
-import android.content.Context.WINDOW_SERVICE
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
-
-import androidx.core.content.ContextCompat.getSystemService
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.picview.databinding.FragmentAllMediaBinding
@@ -38,19 +37,27 @@ class AllMediaFragment : Fragment() {
 
         mediaList = getMediaList()
 
-        binding.allPhotoRecyclerView.setHasFixedSize(true)
-        binding.allPhotoRecyclerView.layoutManager = GridLayoutManager(context, 3)
-        allMediaAdapter = AllMediaAdapter(context, mediaList, "AllPhotos")
-        binding.allPhotoRecyclerView.adapter = allMediaAdapter
 
+        setUpRecyclerView()
         binding.swipeRefresh.setOnRefreshListener {
-            binding.swipeRefresh.isRefreshing=false
+            setUpRecyclerView()
+            binding.swipeRefresh.isRefreshing = false
         }
 
         return binding.root
 
     }
 
+    private fun setUpRecyclerView() {
+
+        binding.allPhotoRecyclerView.setHasFixedSize(true)
+        val sharedPreferences: SharedPreferences = context.getSharedPreferences("sharePref", AppCompatActivity.MODE_PRIVATE)
+        val numberOfColumn:Int = sharedPreferences.getInt("Column",3)
+
+        binding.allPhotoRecyclerView.layoutManager = GridLayoutManager(context, numberOfColumn)
+        allMediaAdapter = AllMediaAdapter(context, mediaList, "AllPhotos")
+        binding.allPhotoRecyclerView.adapter = allMediaAdapter
+    }
 
     private fun getMediaList(): ArrayList<MediaData> {
         val tempMediaList = ArrayList<MediaData>()
@@ -65,7 +72,10 @@ class AllMediaFragment : Fragment() {
 
         val selection = "${MediaStore.Files.FileColumns.MEDIA_TYPE} IN (?,?) "
 
-        val selectionArgs = arrayOf(MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString(), MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString())
+        val selectionArgs = arrayOf(
+            MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString(),
+            MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString()
+        )
 
         val sortBy = "${MediaStore.Files.FileColumns.DATE_ADDED} DESC"
 
@@ -81,12 +91,14 @@ class AllMediaFragment : Fragment() {
 
         val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
 
-        if(cursor != null && cursor.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()) {
 
             val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns._ID)
             val pathColumn = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA)
-            val dateTakenColumn = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATE_TAKEN)
-            val mediaTypeColumn = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.MEDIA_TYPE)
+            val dateTakenColumn =
+                cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATE_TAKEN)
+            val mediaTypeColumn =
+                cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.MEDIA_TYPE)
 
             do {
 
@@ -95,20 +107,20 @@ class AllMediaFragment : Fragment() {
                 val dateTaken = cursor.getLong(dateTakenColumn)
                 val mediaType = cursor.getString(mediaTypeColumn)
 
-                val mediaUri = ContentUris.withAppendedId(queryUri,id)
+                val mediaUri = ContentUris.withAppendedId(queryUri, id)
 
                 val isVideo = mediaType == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString()
 
-                val formattedDate = if(dateTaken != 0L) {
+                val formattedDate = if (dateTaken != 0L) {
                     dateFormat.format(dateTaken)
                 } else {
                     dateFormat.format(getDateModified(path))
                 }
-                val mediaItem = MediaData(mediaUri,formattedDate,isVideo)
+                val mediaItem = MediaData(mediaUri, formattedDate, isVideo)
 
                 tempMediaList.add(mediaItem)
 
-            } while(cursor.moveToNext())
+            } while (cursor.moveToNext())
         }
         cursor?.close()
 

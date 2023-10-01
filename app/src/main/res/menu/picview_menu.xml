@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/setting"
-        android:title="@string/settings" />
+        android:id="@+id/gridColumn"
+        android:title="@string/gridColumnNumber" />
     <item
         android:id="@+id/about"
         android:title="@string/About" />
     <item
         android:id="@+id/exit"
         android:title="@string/Exit" />
-
 
 </menu>
