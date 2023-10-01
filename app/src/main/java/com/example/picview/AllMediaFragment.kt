@@ -23,7 +23,6 @@ class AllMediaFragment : Fragment() {
 
     companion object {
         lateinit var mediaList: ArrayList<MediaData>
-
     }
 
     override fun onCreateView(
@@ -36,7 +35,7 @@ class AllMediaFragment : Fragment() {
         mediaList = getMediaList()
 
         binding.allPhotoRecyclerView.setHasFixedSize(true)
-        binding.allPhotoRecyclerView.layoutManager = GridLayoutManager(context, 4)
+        binding.allPhotoRecyclerView.layoutManager = GridLayoutManager(context, 3)
         allMediaAdapter = AllMediaAdapter(context, mediaList, "AllPhotos")
         binding.allPhotoRecyclerView.adapter = allMediaAdapter
 

@@ -1,16 +1,16 @@
 package com.example.picview
 
+import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.example.picview.databinding.ActivityRequestPermissionBinding
-import android.Manifest
-import android.os.Build
-import androidx.annotation.RequiresApi
 
 class RequestPermission : AppCompatActivity() {
     private lateinit var binding: ActivityRequestPermissionBinding
@@ -48,17 +48,17 @@ class RequestPermission : AppCompatActivity() {
     private fun checkHasPermission() {
         // Check for both image and video permissions
         MainActivity.hasPermissionImages =
-            hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE) ||
-                    hasPermission(Manifest.permission.READ_MEDIA_IMAGES)
+            hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE) || hasPermission(Manifest.permission.READ_MEDIA_IMAGES)
 
         MainActivity.hasPermissionVideos =
-            hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE) ||
-                    hasPermission(Manifest.permission.READ_MEDIA_VIDEO)
+            hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE) || hasPermission(Manifest.permission.READ_MEDIA_VIDEO)
     }
 
     private fun hasPermission(permission: String): Boolean {
         // Check if the app has the specified permission
-        return ActivityCompat.checkSelfPermission(this@RequestPermission, permission) ==
-                PackageManager.PERMISSION_GRANTED
+        return ActivityCompat.checkSelfPermission(
+            this@RequestPermission,
+            permission
+        ) == PackageManager.PERMISSION_GRANTED
     }
 }

@@ -6,8 +6,8 @@
 
     <ImageView
         android:id="@+id/allPhotoImageView"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_margin="2dp"
         android:contentDescription="@string/imageRaw"
         android:scaleType="centerCrop"
