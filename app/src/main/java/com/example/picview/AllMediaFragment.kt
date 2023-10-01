@@ -2,11 +2,15 @@ package com.example.picview
 
 import android.content.ContentUris
 import android.content.Context
+import android.content.Context.WINDOW_SERVICE
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.picview.databinding.FragmentAllMediaBinding
@@ -38,6 +42,10 @@ class AllMediaFragment : Fragment() {
         binding.allPhotoRecyclerView.layoutManager = GridLayoutManager(context, 3)
         allMediaAdapter = AllMediaAdapter(context, mediaList, "AllPhotos")
         binding.allPhotoRecyclerView.adapter = allMediaAdapter
+
+        binding.swipeRefresh.setOnRefreshListener {
+            binding.swipeRefresh.isRefreshing=false
+        }
 
         return binding.root
 

@@ -46,7 +46,7 @@ class AlbumMedia : AppCompatActivity() {
     private fun setRecyclerview() {
         val allMediaAdapter =
             AllMediaAdapter(applicationContext, mediaList, from)
-        binding.albumsImagesRecyclerView.layoutManager = GridLayoutManager(applicationContext, 4)
+        binding.albumsImagesRecyclerView.layoutManager = GridLayoutManager(applicationContext, 3)
         binding.albumsImagesRecyclerView.adapter = allMediaAdapter
     }
 }

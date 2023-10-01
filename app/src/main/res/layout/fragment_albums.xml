@@ -6,14 +6,14 @@
     android:orientation="vertical"
     tools:context=".AlbumsFragment">
 
-    <Button
+    <ImageButton
         android:id="@+id/favoritesButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:layout_marginTop="5dp"
-        android:padding="10dp"
-        android:text="@string/favorites"
+        android:background="#68B027AE"
+        android:contentDescription="@string/favorites"
+        android:padding="15dp"
+        android:src="@drawable/ic_favorite_filled"
         android:textSize="15sp" />
 
     <androidx.recyclerview.widget.RecyclerView

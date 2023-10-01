@@ -5,6 +5,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.picview.databinding.ItemRawBinding
@@ -30,6 +31,7 @@ class AllMediaAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
         if (mediaList[position].isVideo) {
             holder.videoIcon.visibility = View.VISIBLE
             Glide.with(context).load(mediaList[position].mediaUri).into(holder.image)
@@ -37,6 +39,15 @@ class AllMediaAdapter(
             holder.videoIcon.visibility = View.GONE
             Glide.with(context).load(mediaList[position].mediaUri).into(holder.image)
         }
+
+        val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val display = wm.defaultDisplay
+
+        val width= display.width
+        val height= display.height
+
+        holder.image.minimumHeight = height
+        holder.image.minimumWidth = width
 
         holder.itemView.setOnClickListener {
             val intent = Intent(context, FullScreenMedia::class.java)

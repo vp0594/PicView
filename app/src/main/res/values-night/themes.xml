@@ -1,6 +1,11 @@
 <resources >
     <!-- Base application theme. -->
-    <style name="Base.Theme.PicView" parent="Theme.AppCompat.DayNight">
+    <style name="Base.Theme.PicView" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:colorBackground">@color/black</item>
+    </style>
+    <style name="Base.Theme.PicView_menu" parent="Theme.AppCompat.DayNight">
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:colorBackground">@color/black</item>

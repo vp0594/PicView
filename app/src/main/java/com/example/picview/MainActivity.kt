@@ -20,8 +20,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    lateinit var drawerLayout: DrawerLayout
-    lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
+    private lateinit var drawerLayout: DrawerLayout
+    private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
 
     companion object {
         private const val PERMISSION_REQUEST_EXTERNAL_STORAGE = 1
@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity() {
 
 
         checkAppPermissions()
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

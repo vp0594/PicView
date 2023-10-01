@@ -18,6 +18,7 @@ class FullScreenMedia : AppCompatActivity(),
     private lateinit var binding: ActivityFullScreenMediaBinding
     private lateinit var fullScreenMediaAdapter: FullScreenMediaAdapter
     private lateinit var dataBase: FavouritesDataBase
+
     private var currentPosition = 0
 
     private val slideshowHandler = Handler()
@@ -36,6 +37,7 @@ class FullScreenMedia : AppCompatActivity(),
         } else {
             Uri.parse("")
         }
+
 
         super.onCreate(savedInstanceState)
         binding = ActivityFullScreenMediaBinding.inflate(layoutInflater)

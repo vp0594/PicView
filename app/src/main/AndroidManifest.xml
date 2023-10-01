@@ -22,9 +22,6 @@
             android:name=".VideoPlayer"
             android:exported="false" />
         <activity
-            android:name=".FullScreenVideo"
-            android:exported="false" />
-        <activity
             android:name=".AlbumMedia"
             android:exported="false" />
         <activity
@@ -46,6 +43,7 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
+            android:theme="@style/Base.Theme.PicView_menu"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
