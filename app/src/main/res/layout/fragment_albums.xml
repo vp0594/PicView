@@ -18,7 +18,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/border"
-            android:padding="5dp"
             android:paddingEnd="10dp">
 
             <ImageButton
@@ -27,14 +26,12 @@
                 android:layout_height="40dp"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/favorites"
-                android:padding="15dp"
                 android:src="@drawable/ic_favorite_filled"
                 android:textSize="15sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:paddingTop="5dp"
                 android:text="@string/favorites"
                 android:textAlignment="center"
                 android:textSize="20sp" />
