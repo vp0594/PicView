@@ -16,4 +16,5 @@
     <string name="nav_close">Menu Close</string>
     <string name="number_of_column">Enter Number Of Column</string>
     <string name="gridColumnNumber">GridColumn</string>
+    <string name="aboutPicView">Thanks For Using PicView\n\nDeveloped By VP:\n\nSource Code:</string>
 </resources>
