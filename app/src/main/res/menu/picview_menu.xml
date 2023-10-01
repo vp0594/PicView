@@ -3,6 +3,10 @@
     <item
         android:id="@+id/gridColumn"
         android:title="@string/gridColumnNumber" />
+
+    <item
+        android:id="@+id/slideShow"
+        android:title="@string/slideShowTimer" />
     <item
         android:id="@+id/about"
         android:title="@string/About" />

@@ -1,6 +1,7 @@
 package com.example.picview
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -134,7 +135,11 @@ class FullScreenMedia : AppCompatActivity(),
 
     private fun startSlideshow(position: Int) {
         var currentImagePosition = position
-        val delayMillis = 2000L
+
+        val sharedPreferences: SharedPreferences = getSharedPreferences("sharePref", AppCompatActivity.MODE_PRIVATE)
+        val slideshowTimer:Int = sharedPreferences.getInt("slideshowTime",3)
+
+        val delayMillis = slideshowTimer*1000.toLong()
 
         val runnable = object : Runnable {
             override fun run() {

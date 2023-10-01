@@ -97,6 +97,38 @@ class MainActivity : AppCompatActivity() {
 
                 }
 
+                R.id.slideShow -> {
+                    val dialog = Dialog(this)
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                    dialog.setCancelable(false)
+                    dialog.setContentView(R.layout.setting_layout)
+                    dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+                    val sharedPreferences = getSharedPreferences("sharePref", MODE_PRIVATE)
+                    val editor = sharedPreferences.edit()
+
+                    val slideshowEditText = dialog.findViewById<EditText>(R.id.columnCount)
+                    val yesButton = dialog.findViewById<Button>(R.id.yesColumn)
+                    val noButton = dialog.findViewById<Button>(R.id.noColumn)
+
+                    slideshowEditText.hint = "Enter Time in seconds"
+
+                    yesButton.setOnClickListener {
+                        val slideshowTimer: Int = slideshowEditText.text.toString().toInt()
+                        editor.apply {
+                            putInt("slideshowTime", slideshowTimer)
+
+                        }.apply()
+                        dialog.dismiss()
+                    }
+
+                    noButton.setOnClickListener {
+                        dialog.dismiss()
+                    }
+                    dialog.show()
+
+                }
+
                 R.id.about -> startActivity(Intent(this@MainActivity, About::class.java))
                 R.id.exit -> {
                     val dialog = MaterialAlertDialogBuilder(this)

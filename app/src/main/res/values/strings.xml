@@ -14,7 +14,8 @@
     <string name="Exit">Exit</string>
     <string name="nav_open">Menu Open</string>
     <string name="nav_close">Menu Close</string>
-    <string name="number_of_column">Enter Number Of Column</string>
+    <string name="number_of_column">Ideal Between 3 to 7</string>
     <string name="gridColumnNumber">GridColumn</string>
     <string name="aboutPicView">Thanks For Using PicView\n\nDeveloped By VP:\n\nSource Code:</string>
+    <string name="slideShowTimer">Slideshow slide Time</string>
 </resources>
