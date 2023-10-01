@@ -53,7 +53,6 @@ class AllMediaFragment : Fragment() {
         binding.allPhotoRecyclerView.setHasFixedSize(true)
         val sharedPreferences: SharedPreferences = context.getSharedPreferences("sharePref", AppCompatActivity.MODE_PRIVATE)
         val numberOfColumn:Int = sharedPreferences.getInt("Column",3)
-
         binding.allPhotoRecyclerView.layoutManager = GridLayoutManager(context, numberOfColumn)
         allMediaAdapter = AllMediaAdapter(context, mediaList, "AllPhotos")
         binding.allPhotoRecyclerView.adapter = allMediaAdapter

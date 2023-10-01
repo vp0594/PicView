@@ -1,5 +1,6 @@
 package com.example.picview
 
+import android.content.SharedPreferences
 import android.os.Bundle
 
 import androidx.appcompat.app.AppCompatActivity
@@ -44,9 +45,14 @@ class AlbumMedia : AppCompatActivity() {
     }
 
     private fun setRecyclerview() {
+
         val allMediaAdapter =
             AllMediaAdapter(applicationContext, mediaList, from)
-        binding.albumsImagesRecyclerView.layoutManager = GridLayoutManager(applicationContext, 3)
+        val sharedPreferences: SharedPreferences =
+            getSharedPreferences("sharePref", AppCompatActivity.MODE_PRIVATE)
+        val numberOfColumn: Int = sharedPreferences.getInt("Column", 3)
+        binding.albumsImagesRecyclerView.layoutManager =
+            GridLayoutManager(applicationContext, numberOfColumn)
         binding.albumsImagesRecyclerView.adapter = allMediaAdapter
     }
 }
