@@ -19,6 +19,12 @@
         android:theme="@style/Base.Theme.PicView"
         tools:targetApi="33">
         <activity
+            android:name=".About"
+            android:exported="false" />
+        <activity
+            android:name=".Setting"
+            android:exported="false" />
+        <activity
             android:name=".VideoPlayer"
             android:exported="false" />
         <activity
@@ -43,8 +49,8 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:theme="@style/Base.Theme.PicView_menu"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Base.Theme.PicView_menu">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

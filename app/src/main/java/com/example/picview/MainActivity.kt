@@ -1,6 +1,8 @@
 package com.example.picview
 
 import android.Manifest
+import android.app.Activity
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -14,7 +16,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.picview.databinding.ActivityMainBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlin.system.exitProcess
 
 
 class MainActivity : AppCompatActivity() {
@@ -38,16 +42,42 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         drawerLayout = binding.drawerLayout
-        actionBarDrawerToggle = ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close)
+        actionBarDrawerToggle =
+            ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close)
 
         drawerLayout.addDrawerListener(actionBarDrawerToggle)
         actionBarDrawerToggle.syncState()
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        setUpNavItemClick()
 
         checkAppPermissions()
 
+    }
+
+    private fun setUpNavItemClick() {
+        binding.navView.setNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.setting -> startActivity(Intent(this@MainActivity, Setting::class.java))
+                R.id.about -> startActivity(Intent(this@MainActivity, About::class.java))
+                R.id.exit -> {
+                    val dialog = MaterialAlertDialogBuilder(this)
+                    dialog.setTitle("Exit!").setCancelable(false).setMessage("Exit App??")
+                        .setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                            val activity: MainActivity = MainActivity()
+                            activity.finish()
+                            // on below line we are exiting our activity
+                            exitProcess(0)
+                        }
+                        .setNegativeButton("No") { dialog, _: Int ->
+                            dialog.dismiss()
+                        }
+                    dialog.show()
+                }
+            }
+            true
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
