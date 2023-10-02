@@ -3,11 +3,13 @@ package com.example.picview
 import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.picview.databinding.FragmentAlbumsBinding
@@ -20,7 +22,7 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
 
     private var _binding: FragmentAlbumsBinding? = null
     private val binding get() = _binding!!
-    private val context: Context? = activity?.applicationContext
+    private lateinit var context: Context
     private val albumsData = ArrayList<AlbumData>()
 
     companion object {
@@ -31,14 +33,12 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-
+        context = activity?.applicationContext!!
         _binding = FragmentAlbumsBinding.inflate(inflater, container, false)
 
         fetchAlbumsData()
-        val albumsAdapter = AlbumsAdapter(requireContext(), albumsData, this)
 
-        binding.albumsRecyclerView.layoutManager = GridLayoutManager(context, 2)
-        binding.albumsRecyclerView.adapter = albumsAdapter
+        setUpRecyclerView()
 
         binding.favoritesButton.setOnClickListener {
             val intent = Intent(requireContext(), AlbumMedia::class.java)
@@ -46,9 +46,24 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
             startActivity(intent)
         }
 
+        binding.swipeRefresh.setOnRefreshListener {
+            setUpRecyclerView()
+            binding.swipeRefresh.isRefreshing = false
+        }
+
         return binding.root
     }
 
+
+    private fun setUpRecyclerView() {
+
+        val sharedPreferences: SharedPreferences =
+            context.getSharedPreferences("sharePref", AppCompatActivity.MODE_PRIVATE)
+        val numberOfColumnAlbums: Int = sharedPreferences.getInt("ColumnAlbums", 2)
+        binding.albumsRecyclerView.layoutManager = GridLayoutManager(context, numberOfColumnAlbums)
+        val albumsAdapter = AlbumsAdapter(requireContext(), albumsData, this)
+        binding.albumsRecyclerView.adapter = albumsAdapter
+    }
 
     private fun fetchAlbumsData() {
 
@@ -144,9 +159,14 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
             MediaStore.Files.FileColumns.MEDIA_TYPE,
         )
 
-        val selection = "${MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME} = ? AND ${MediaStore.Files.FileColumns.MEDIA_TYPE} IN (?,?) "
+        val selection =
+            "${MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME} = ? AND ${MediaStore.Files.FileColumns.MEDIA_TYPE} IN (?,?) "
 
-        val selectionArgs = arrayOf(folderName, MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString(), MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString())
+        val selectionArgs = arrayOf(
+            folderName,
+            MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString(),
+            MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString()
+        )
 
         val sortBy = "${MediaStore.Files.FileColumns.DATE_ADDED} DESC"
 
@@ -162,12 +182,14 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
 
         val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
 
-        if(cursor != null && cursor.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()) {
 
             val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns._ID)
             val pathColumn = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA)
-            val dateTakenColumn = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATE_TAKEN)
-            val mediaTypeColumn = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.MEDIA_TYPE)
+            val dateTakenColumn =
+                cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATE_TAKEN)
+            val mediaTypeColumn =
+                cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.MEDIA_TYPE)
 
             do {
 
@@ -176,20 +198,20 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
                 val dateTaken = cursor.getLong(dateTakenColumn)
                 val mediaType = cursor.getString(mediaTypeColumn)
 
-                val mediaUri = ContentUris.withAppendedId(queryUri,id)
+                val mediaUri = ContentUris.withAppendedId(queryUri, id)
 
                 val isVideo = mediaType == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString()
 
-                val formattedDate = if(dateTaken != 0L) {
+                val formattedDate = if (dateTaken != 0L) {
                     dateFormat.format(dateTaken)
                 } else {
                     dateFormat.format(getDateModified(path))
                 }
-                val mediaItem = MediaData(mediaUri,formattedDate,isVideo)
+                val mediaItem = MediaData(mediaUri, formattedDate, isVideo)
 
                 tempMediaList.add(mediaItem)
 
-            } while(cursor.moveToNext())
+            } while (cursor.moveToNext())
         }
         cursor?.close()
 

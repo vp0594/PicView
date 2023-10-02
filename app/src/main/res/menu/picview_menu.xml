@@ -3,6 +3,9 @@
     <item
         android:id="@+id/gridColumn"
         android:title="@string/gridColumnNumber" />
+    <item
+        android:id="@+id/gridColumnAlbums"
+        android:title="@string/gridColumnNumberAlbums" />
 
     <item
         android:id="@+id/slideShow"

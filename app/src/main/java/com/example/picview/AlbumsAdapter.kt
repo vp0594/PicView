@@ -1,8 +1,11 @@
 package com.example.picview
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.picview.databinding.AlbumsRawBinding
@@ -15,7 +18,7 @@ class AlbumsAdapter(
     class ViewHolder(binding: AlbumsRawBinding) : RecyclerView.ViewHolder(binding.root) {
         val albumsCover = binding.albumsCoverImageView
         val albumsName = binding.albumsNameTextView
-        val albumsSize = binding.albumsSizeTextView
+        val albumsLayout = binding.albumsLinearLayout
     }
 
     interface AlbumClickListener {
@@ -32,9 +35,20 @@ class AlbumsAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val sharedPreferences: SharedPreferences = context.getSharedPreferences("sharePref", AppCompatActivity.MODE_PRIVATE)
+        val numberOfColumn:Int = sharedPreferences.getInt("ColumnAlbums",2)
+
+        val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val display = windowManager.defaultDisplay
+
         Glide.with(context).load(albumsData[position].coverImage).into(holder.albumsCover)
         holder.albumsName.text = albumsData[position].folderName
-        //holder.albumsSize.text = albumsData.size.toString()
+
+
+        val size= display.width
+
+        holder.albumsCover.minimumHeight=size/numberOfColumn
+        holder.albumsCover.minimumWidth=size/numberOfColumn
 
         holder.itemView.setOnClickListener {
             albumClickListener.onAlbumClick(albumsData[position].folderName)

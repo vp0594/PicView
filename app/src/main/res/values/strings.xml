@@ -18,4 +18,5 @@
     <string name="gridColumnNumber">GridColumn</string>
     <string name="aboutPicView">Thanks For Using PicView\n\nDeveloped By VP:\n\nSource Code:</string>
     <string name="slideShowTimer">Slideshow slide Time</string>
+    <string name="gridColumnNumberAlbums">Grid Column for albums</string>
 </resources>

@@ -46,13 +46,13 @@ class AllMediaAdapter(
         val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val display = windowManager.defaultDisplay
 
-        val width= display.width
+        val size= display.width
 
         val sharedPreferences:SharedPreferences = context.getSharedPreferences("sharePref", AppCompatActivity.MODE_PRIVATE)
         val numberOfColumn:Int = sharedPreferences.getInt("Column",3)
 
-        holder.image.minimumHeight = width/numberOfColumn
-        holder.image.minimumWidth = width/numberOfColumn
+        holder.image.minimumHeight = size/numberOfColumn
+        holder.image.minimumWidth = size/numberOfColumn
 
         holder.itemView.setOnClickListener {
             val intent = Intent(context, FullScreenMedia::class.java)

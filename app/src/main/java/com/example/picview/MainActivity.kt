@@ -97,6 +97,38 @@ class MainActivity : AppCompatActivity() {
 
                 }
 
+                R.id.gridColumnAlbums -> {
+                    val dialog = Dialog(this)
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                    dialog.setCancelable(false)
+                    dialog.setContentView(R.layout.setting_layout)
+                    dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+                    val sharedPreferences = getSharedPreferences("sharePref", MODE_PRIVATE)
+                    val editor = sharedPreferences.edit()
+
+                    val numberOfColumnAlbumsEditText = dialog.findViewById<EditText>(R.id.columnCount)
+                    val yesButton = dialog.findViewById<Button>(R.id.yesColumn)
+                    val noButton = dialog.findViewById<Button>(R.id.noColumn)
+
+
+
+                    yesButton.setOnClickListener {
+                        val numberOfColumnAlbums: Int = numberOfColumnAlbumsEditText.text.toString().toInt()
+                        editor.apply {
+                            putInt("ColumnAlbums", numberOfColumnAlbums)
+
+                        }.apply()
+                        dialog.dismiss()
+                    }
+
+                    noButton.setOnClickListener {
+                        dialog.dismiss()
+                    }
+                    dialog.show()
+
+                }
+
                 R.id.slideShow -> {
                     val dialog = Dialog(this)
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -154,6 +186,7 @@ class MainActivity : AppCompatActivity() {
             true
         } else super.onOptionsItemSelected(item)
     }
+
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun checkAppPermissions() {
