@@ -36,8 +36,6 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
         context = activity?.applicationContext!!
         _binding = FragmentAlbumsBinding.inflate(inflater, container, false)
 
-
-
         setUpRecyclerView()
 
         binding.favoritesButton.setOnClickListener {

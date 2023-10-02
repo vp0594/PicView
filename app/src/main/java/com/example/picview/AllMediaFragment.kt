@@ -8,7 +8,6 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -35,7 +34,7 @@ class AllMediaFragment : Fragment() {
         context = activity?.applicationContext!!
         _binding = FragmentAllMediaBinding.inflate(inflater, container, false)
 
-        mediaList = getMediaList()
+
 
 
         setUpRecyclerView()
@@ -49,10 +48,11 @@ class AllMediaFragment : Fragment() {
     }
 
     private fun setUpRecyclerView() {
-
+        mediaList = getMediaList()
         binding.allPhotoRecyclerView.setHasFixedSize(true)
-        val sharedPreferences: SharedPreferences = context.getSharedPreferences("sharePref", AppCompatActivity.MODE_PRIVATE)
-        val numberOfColumn:Int = sharedPreferences.getInt("Column",3)
+        val sharedPreferences: SharedPreferences =
+            context.getSharedPreferences("sharePref", AppCompatActivity.MODE_PRIVATE)
+        val numberOfColumn: Int = sharedPreferences.getInt("Column", 3)
         binding.allPhotoRecyclerView.layoutManager = GridLayoutManager(context, numberOfColumn)
         allMediaAdapter = AllMediaAdapter(context, mediaList, "AllPhotos")
         binding.allPhotoRecyclerView.adapter = allMediaAdapter
