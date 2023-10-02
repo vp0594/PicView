@@ -29,10 +29,10 @@
             android:background="@color/black"
             android:foregroundGravity="bottom"
             android:padding="5dp"
-            app:layout_constraintTop_toBottomOf="@id/homePageViewPage"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/homePageViewPage" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -41,9 +41,9 @@
         android:id="@+id/navView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        app:itemIconTint="@color/iconColor"
         android:layout_gravity="start"
         android:divider="@android:color/transparent"
+        app:itemIconTint="@color/iconColor"
         app:menu="@menu/picview_menu" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
