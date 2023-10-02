@@ -28,6 +28,7 @@
             android:layout_height="wrap_content"
             android:foregroundGravity="bottom"
             android:padding="5dp"
+            app:tabIndicatorColor="@color/iconColorMenu"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

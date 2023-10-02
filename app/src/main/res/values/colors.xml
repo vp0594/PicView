@@ -2,6 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="backGroundColor">#FFFFFFFF</color>
+    <color name="backGroundColorSettingDialog">#FFFFFFFF</color>
     <color name="white">#FFFFFFFF</color>
     <color name="iconColorMenu">#E91E63</color>
     <color name="iconColor">#FFFFFFFF</color>
