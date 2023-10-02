@@ -56,9 +56,11 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        setUpNavItemClick()
-
         checkAppPermissions()
+
+        setUpTabLayout()
+
+        setUpNavItemClick()
 
     }
 
@@ -85,7 +87,6 @@ class MainActivity : AppCompatActivity() {
                         val numberOfColumn: Int = numberOfColumnEditText.text.toString().toInt()
                         editor.apply {
                             putInt("Column", numberOfColumn)
-                            setUpTabLayout()
                         }.apply()
                         dialog.dismiss()
                     }
@@ -119,7 +120,6 @@ class MainActivity : AppCompatActivity() {
                             numberOfColumnAlbumsEditText.text.toString().toInt()
                         editor.apply {
                             putInt("ColumnAlbums", numberOfColumnAlbums)
-                            setUpTabLayout()
                         }.apply()
                         dialog.dismiss()
                     }
