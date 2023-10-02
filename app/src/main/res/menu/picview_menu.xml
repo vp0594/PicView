@@ -2,19 +2,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/gridColumn"
+        android:icon="@drawable/ic_all_media_grid"
         android:title="@string/gridColumnNumber" />
     <item
         android:id="@+id/gridColumnAlbums"
+        android:icon="@drawable/ic_all_albums_grid"
         android:title="@string/gridColumnNumberAlbums" />
 
     <item
         android:id="@+id/slideShow"
+        android:icon="@drawable/ic_slides_show"
         android:title="@string/slideShowTimer" />
     <item
         android:id="@+id/about"
+        android:icon="@drawable/ic_info"
         android:title="@string/About" />
     <item
         android:id="@+id/exit"
+        android:icon="@drawable/ic_exit"
         android:title="@string/Exit" />
 
 </menu>

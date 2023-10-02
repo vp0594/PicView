@@ -41,6 +41,7 @@
         android:id="@+id/navView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        app:itemIconTint="@color/iconColor"
         android:layout_gravity="start"
         android:divider="@android:color/transparent"
         app:menu="@menu/picview_menu" />
