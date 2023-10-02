@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity() {
                         val numberOfColumn: Int = numberOfColumnEditText.text.toString().toInt()
                         editor.apply {
                             putInt("Column", numberOfColumn)
-
+                            setUpTabLayout()
                         }.apply()
                         dialog.dismiss()
                     }
@@ -107,17 +107,19 @@ class MainActivity : AppCompatActivity() {
                     val sharedPreferences = getSharedPreferences("sharePref", MODE_PRIVATE)
                     val editor = sharedPreferences.edit()
 
-                    val numberOfColumnAlbumsEditText = dialog.findViewById<EditText>(R.id.columnCount)
+                    val numberOfColumnAlbumsEditText =
+                        dialog.findViewById<EditText>(R.id.columnCount)
                     val yesButton = dialog.findViewById<Button>(R.id.yesColumn)
                     val noButton = dialog.findViewById<Button>(R.id.noColumn)
 
-
+                    numberOfColumnAlbumsEditText.hint = "Recommend: 2 to 4"
 
                     yesButton.setOnClickListener {
-                        val numberOfColumnAlbums: Int = numberOfColumnAlbumsEditText.text.toString().toInt()
+                        val numberOfColumnAlbums: Int =
+                            numberOfColumnAlbumsEditText.text.toString().toInt()
                         editor.apply {
                             putInt("ColumnAlbums", numberOfColumnAlbums)
-
+                            setUpTabLayout()
                         }.apply()
                         dialog.dismiss()
                     }
