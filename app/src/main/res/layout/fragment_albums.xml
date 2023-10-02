@@ -50,6 +50,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/albumsRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:scrollbarStyle="outsideOverlay"
+            android:scrollbars="vertical"/>
     </LinearLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

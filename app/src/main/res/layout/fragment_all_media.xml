@@ -9,5 +9,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/allPhotoRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="vertical"/>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
