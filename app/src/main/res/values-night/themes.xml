@@ -17,6 +17,6 @@
     <style name="Base.Theme.PicView.FullScreenMedia" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:colorBackground">@color/black</item>
+        <item name="android:colorBackground">@color/backGroundColor</item>
     </style>
 </resources>
