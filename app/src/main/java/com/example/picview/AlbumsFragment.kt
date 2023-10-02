@@ -23,7 +23,7 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
     private var _binding: FragmentAlbumsBinding? = null
     private val binding get() = _binding!!
     private lateinit var context: Context
-    private val albumsData = ArrayList<AlbumData>()
+    private var albumsData = ArrayList<AlbumData>()
 
     companion object {
         lateinit var mediaList: ArrayList<MediaData>
@@ -37,6 +37,8 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
         _binding = FragmentAlbumsBinding.inflate(inflater, container, false)
 
         setUpRecyclerView()
+
+
 
         binding.favoritesButton.setOnClickListener {
             val intent = Intent(requireContext(), AlbumMedia::class.java)
@@ -54,7 +56,7 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
 
 
     private fun setUpRecyclerView() {
-        fetchAlbumsData()
+        albumsData = fetchAlbumsData()
         val sharedPreferences: SharedPreferences =
             context.getSharedPreferences("sharePref", AppCompatActivity.MODE_PRIVATE)
         val numberOfColumnAlbums: Int = sharedPreferences.getInt("ColumnAlbums", 2)
@@ -63,8 +65,9 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
         binding.albumsRecyclerView.adapter = albumsAdapter
     }
 
-    private fun fetchAlbumsData() {
+    private fun fetchAlbumsData(): ArrayList<AlbumData> {
 
+        val tempMediaList = ArrayList<AlbumData>()
 
         val projection = arrayOf(
             MediaStore.Files.FileColumns._ID,
@@ -112,7 +115,7 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
 
             } while (cursor.moveToNext())
             albumsMap.forEach { (folderName, imageCoverPath) ->
-                albumsData.add(
+                tempMediaList.add(
                     AlbumData(
                         folderName,
                         imageCoverPath
@@ -122,71 +125,7 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
 
         }
         cursor?.close()
-//        val projection =
-//            arrayOf(MediaStore.Images.Media.BUCKET_DISPLAY_NAME, MediaStore.Images.Media.DATA)
-//
-//        val sortBy = "${MediaStore.Images.Media.BUCKET_DISPLAY_NAME} ASC"
-//
-//        val cursor = requireContext().contentResolver.query(
-//            MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null, null, sortBy
-//        )
-//        val albumMap = mutableMapOf<String, String>()
-//        if (cursor != null) {
-//            if (cursor.moveToNext()) {
-//                val folderNameColumn =
-//                    cursor.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME)
-//                val imageCoverPathColumn =
-//                    cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-//
-//                do {
-//                    val folderName = cursor.getString(folderNameColumn)
-//                    val imageCoverPath = cursor.getString(imageCoverPathColumn)
-//
-//                    if (!albumMap.containsKey(folderName)) {
-//                        albumMap[folderName] = imageCoverPath
-//                    }
-//
-//                } while (cursor.moveToNext())
-//                albumMap.forEach { (folderName, imagePath) ->
-//                    albumsData.add(AlbumData(folderName, imagePath))
-//                }
-//            }
-//            cursor.close()
-//        }
-//
-//
-//        val videoProjection =
-//            arrayOf(MediaStore.Video.Media.BUCKET_DISPLAY_NAME, MediaStore.Video.Media.DATA)
-//
-//        val videoSortBy = "${MediaStore.Video.Media.BUCKET_DISPLAY_NAME} ASC"
-//
-//        val videoCursor = requireContext().contentResolver.query(
-//            MediaStore.Video.Media.EXTERNAL_CONTENT_URI, videoProjection, null, null, videoSortBy
-//        )
-//
-//        if (videoCursor != null) {
-//            if (videoCursor.moveToNext()) {
-//                val folderNameColumn =
-//                    videoCursor.getColumnIndexOrThrow(MediaStore.Video.Media.BUCKET_DISPLAY_NAME)
-//                val imageCoverPathColumn =
-//                    videoCursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA)
-//
-//                do {
-//                    val folderName = videoCursor.getString(folderNameColumn)
-//                    val imageCoverPath = videoCursor.getString(imageCoverPathColumn)
-//
-//                    if (!albumMap.containsKey(folderName)) {
-//                        albumMap[folderName] = imageCoverPath
-//                    }
-//
-//                } while (videoCursor.moveToNext())
-//                albumMap.forEach { (folderName, imagePath) ->
-//                    albumsData.add(AlbumData(folderName, imagePath))
-//                }
-//            }
-//            videoCursor.close()
-//        }
-
+        return tempMediaList
     }
 
 
