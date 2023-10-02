@@ -22,9 +22,6 @@
             android:name=".About"
             android:exported="false" />
         <activity
-            android:name=".Setting"
-            android:exported="false" />
-        <activity
             android:name=".VideoPlayer"
             android:exported="false" />
         <activity
@@ -32,7 +29,8 @@
             android:exported="false" />
         <activity
             android:name=".FullScreenMedia"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Base.Theme.PicView.FullScreenMedia">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

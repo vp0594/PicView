@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:zoomage_animateOnReset="true"
+        android:theme="@style/Base.Theme.PicView.FullScreenMedia"
         app:zoomage_autoCenter="true"
         app:zoomage_autoResetMode="UNDER"
         app:zoomage_maxScale="8"

@@ -26,7 +26,6 @@
             android:id="@+id/homePageTabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/black"
             android:foregroundGravity="bottom"
             android:padding="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
