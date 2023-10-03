@@ -18,7 +18,6 @@ class AlbumsAdapter(
     class ViewHolder(binding: AlbumsRawBinding) : RecyclerView.ViewHolder(binding.root) {
         val albumsCover = binding.albumsCoverImageView
         val albumsName = binding.albumsNameTextView
-        val albumsLayout = binding.albumsLinearLayout
     }
 
     interface AlbumClickListener {
@@ -35,8 +34,9 @@ class AlbumsAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val sharedPreferences: SharedPreferences = context.getSharedPreferences("sharePref", AppCompatActivity.MODE_PRIVATE)
-        val numberOfColumn:Int = sharedPreferences.getInt("ColumnAlbums",2)
+        val sharedPreferences: SharedPreferences =
+            context.getSharedPreferences("sharePref", AppCompatActivity.MODE_PRIVATE)
+        val numberOfColumn: Int = sharedPreferences.getInt("ColumnAlbums", 2)
 
         val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val display = windowManager.defaultDisplay
@@ -45,10 +45,10 @@ class AlbumsAdapter(
         holder.albumsName.text = albumsData[position].folderName
 
 
-        val size= display.width
+        val size = display.width
 
-        holder.albumsCover.minimumHeight=size/numberOfColumn
-        holder.albumsCover.minimumWidth=size/numberOfColumn
+        holder.albumsCover.minimumHeight = size / numberOfColumn
+        holder.albumsCover.minimumWidth = size / numberOfColumn
 
         holder.itemView.setOnClickListener {
             albumClickListener.onAlbumClick(albumsData[position].folderName)

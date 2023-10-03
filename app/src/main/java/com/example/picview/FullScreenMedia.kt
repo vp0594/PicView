@@ -13,8 +13,8 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.picview.databinding.ActivityFullScreenMediaBinding
 import kotlin.system.exitProcess
 
-class FullScreenMedia : AppCompatActivity(),
-    FullScreenMediaAdapter.SideShowButtonClickListener, FullScreenMediaAdapter.VideoActionListener {
+class FullScreenMedia : AppCompatActivity(), FullScreenMediaAdapter.SideShowButtonClickListener,
+    FullScreenMediaAdapter.VideoActionListener {
 
     private lateinit var binding: ActivityFullScreenMediaBinding
     private lateinit var fullScreenMediaAdapter: FullScreenMediaAdapter
@@ -58,8 +58,7 @@ class FullScreenMedia : AppCompatActivity(),
             dataBase.getFavouritesMediaList()
         }
 
-        fullScreenMediaAdapter =
-            FullScreenMediaAdapter(applicationContext, mediaList, this, this)
+        fullScreenMediaAdapter = FullScreenMediaAdapter(applicationContext, mediaList, this, this)
         binding.fullScreenViewPager.adapter = fullScreenMediaAdapter
         currentPosition = intent.getIntExtra("CurrentPosition", 0)
 
@@ -70,20 +69,15 @@ class FullScreenMedia : AppCompatActivity(),
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
 
-                TopActionFragment.binding.dateTextView.text =
-                    mediaList[position].dateTake
+                TopActionFragment.binding.dateTextView.text = mediaList[position].dateTake
 
                 checkVideo(position)
                 checkImageInFavorites(position)
                 VideoActionFragment.binding.playPauseButton.setImageResource(R.drawable.ic_video)
                 currentPosition = position
-                if(mediaList[currentPosition].isVideo){
+                if (mediaList[currentPosition].isVideo) {
                     fullScreenMediaAdapter.notifyItemChanged(currentPosition)
                 }
-                //setMediaController(FullScreenImageAdapter.ViewHolder)
-
-//                binding.fullScreenViewPager.adapter = fullScreenImageAdapter
-//                binding.fullScreenViewPager.setCurrentItem(currentPosition, false)
             }
         })
 
@@ -120,8 +114,7 @@ class FullScreenMedia : AppCompatActivity(),
             shareIntent.action = Intent.ACTION_SEND
             shareIntent.type = "image/*"
             shareIntent.putExtra(
-                Intent.EXTRA_STREAM,
-                mediaList[binding.fullScreenViewPager.currentItem].mediaUri
+                Intent.EXTRA_STREAM, mediaList[binding.fullScreenViewPager.currentItem].mediaUri
             )
             startActivity(Intent.createChooser(shareIntent, "Share Image"))
         }
@@ -136,10 +129,11 @@ class FullScreenMedia : AppCompatActivity(),
     private fun startSlideshow(position: Int) {
         var currentImagePosition = position
 
-        val sharedPreferences: SharedPreferences = getSharedPreferences("sharePref", AppCompatActivity.MODE_PRIVATE)
-        val slideshowTimer:Int = sharedPreferences.getInt("slideshowTime",3)
+        val sharedPreferences: SharedPreferences =
+            getSharedPreferences("sharePref", AppCompatActivity.MODE_PRIVATE)
+        val slideshowTimer: Int = sharedPreferences.getInt("slideshowTime", 3)
 
-        val delayMillis = slideshowTimer*1000.toLong()
+        val delayMillis = slideshowTimer * 1000.toLong()
 
         val runnable = object : Runnable {
             override fun run() {

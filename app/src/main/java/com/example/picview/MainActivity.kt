@@ -49,7 +49,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Inflate the layout with binding
         drawerLayout = binding.drawerLayout
         actionBarDrawerToggle =
             ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close)
@@ -84,8 +83,6 @@ class MainActivity : AppCompatActivity() {
                     val numberOfColumnEditText = dialog.findViewById<EditText>(R.id.columnCount)
                     val yesButton = dialog.findViewById<Button>(R.id.yesColumn)
                     val noButton = dialog.findViewById<Button>(R.id.noColumn)
-
-
 
                     yesButton.setOnClickListener {
                         val numberOfColumn: Int = numberOfColumnEditText.text.toString().toInt()
@@ -174,7 +171,6 @@ class MainActivity : AppCompatActivity() {
                         .setPositiveButton("Yes") { _: DialogInterface, _: Int ->
                             val activity = MainActivity()
                             activity.finish()
-                            // on below line we are exiting our activity
                             exitProcess(0)
                         }.setNegativeButton("No") { dialog, _: Int ->
                             dialog.dismiss()
@@ -196,7 +192,6 @@ class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun checkAppPermissions() {
 
-        //check permission. If not granted added in list
         val permissionsToRequest = mutableListOf<String>()
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
@@ -222,13 +217,11 @@ class MainActivity : AppCompatActivity() {
             permissionsToRequest.add(Manifest.permission.READ_MEDIA_VIDEO)
         }
 
-        //Ask permission which are not granted
         if (permissionsToRequest.isNotEmpty()) {
             ActivityCompat.requestPermissions(
                 this, permissionsToRequest.toTypedArray(), PERMISSION_REQUEST_EXTERNAL_STORAGE
             )
         } else {
-            //If granted setup the tabLayout
             hasPermissionImages = true
             hasPermissionVideos = true
             setUpTabLayout()
@@ -247,7 +240,6 @@ class MainActivity : AppCompatActivity() {
                     hasPermissionVideos = true
                     setUpTabLayout()
                 } else {
-                    //If permission not granted user will be directed to RequestPermission
                     Toast.makeText(applicationContext, "Permission denied", Toast.LENGTH_SHORT)
                         .show()
                     startActivity(Intent(applicationContext, RequestPermission::class.java))

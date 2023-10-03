@@ -59,8 +59,7 @@ class FavouritesDataBase(context: Context) :
             value = cursor.getString(cursor.getColumnIndexOrThrow(mediaUris))
         }
         cursor.close()
-        if (value != null)
-            return true
+        if (value != null) return true
         return false
     }
 
@@ -75,7 +74,8 @@ class FavouritesDataBase(context: Context) :
             while (cursor.moveToNext()) {
                 val imageUriStr = cursor.getString(cursor.getColumnIndexOrThrow(mediaUris))
                 val formattedDate = cursor.getString(cursor.getColumnIndexOrThrow(dateTaken))
-                val isVideo:Boolean = cursor.getString(cursor.getColumnIndexOrThrow(isVideos)) != "false"
+                val isVideo: Boolean =
+                    cursor.getString(cursor.getColumnIndexOrThrow(isVideos)) != "false"
                 val mediaUri = Uri.parse(imageUriStr)
 
                 tempImageList.add(MediaData(mediaUri, formattedDate, isVideo))

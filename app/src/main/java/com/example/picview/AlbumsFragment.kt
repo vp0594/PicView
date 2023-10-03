@@ -87,11 +87,7 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
         val queryUri = MediaStore.Files.getContentUri("external")
 
         val cursor = context.contentResolver.query(
-            queryUri,
-            projection,
-            selection,
-            selectionArgs,
-            sortBy
+            queryUri, projection, selection, selectionArgs, sortBy
         )
         val albumsMap = mutableMapOf<String, String>()
 
@@ -116,8 +112,7 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
             albumsMap.forEach { (folderName, imageCoverPath) ->
                 tempMediaList.add(
                     AlbumData(
-                        folderName,
-                        imageCoverPath
+                        folderName, imageCoverPath
                     )
                 )
             }
@@ -166,11 +161,7 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
         val queryUri = MediaStore.Files.getContentUri("external")
 
         val cursor = requireContext().contentResolver.query(
-            queryUri,
-            projection,
-            selection,
-            selectionArgs,
-            sortBy
+            queryUri, projection, selection, selectionArgs, sortBy
         )
 
         val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())

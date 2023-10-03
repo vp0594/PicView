@@ -25,7 +25,6 @@ class RequestPermission : AppCompatActivity() {
 
     private fun setPermission() {
         binding.requestPermissionButton.setOnClickListener {
-            // Open app settings to allow the user to grant permissions
             val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
             intent.data = Uri.parse("package:$packageName")
             startActivity(intent)
@@ -38,15 +37,13 @@ class RequestPermission : AppCompatActivity() {
         checkHasPermission()
 
         if (MainActivity.hasPermissionImages && MainActivity.hasPermissionVideos) {
-            // All permissions are granted, navigate back to the MainActivity
             startActivity(Intent(this@RequestPermission, MainActivity::class.java))
-            finish() // Finish this activity to prevent returning to it
+            finish()
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun checkHasPermission() {
-        // Check for both image and video permissions
         MainActivity.hasPermissionImages =
             hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE) || hasPermission(Manifest.permission.READ_MEDIA_IMAGES)
 
@@ -55,10 +52,8 @@ class RequestPermission : AppCompatActivity() {
     }
 
     private fun hasPermission(permission: String): Boolean {
-        // Check if the app has the specified permission
         return ActivityCompat.checkSelfPermission(
-            this@RequestPermission,
-            permission
+            this@RequestPermission, permission
         ) == PackageManager.PERMISSION_GRANTED
     }
 }

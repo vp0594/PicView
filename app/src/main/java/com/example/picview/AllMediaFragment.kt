@@ -8,7 +8,6 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -29,13 +28,10 @@ class AllMediaFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         context = activity?.applicationContext!!
         _binding = FragmentAllMediaBinding.inflate(inflater, container, false)
-
-        //mediaList = getMediaList()
 
         setUpRecyclerView()
         binding.swipeRefresh.setOnRefreshListener {
@@ -50,8 +46,9 @@ class AllMediaFragment : Fragment() {
     private fun setUpRecyclerView() {
         mediaList = getMediaList()
         binding.allPhotoRecyclerView.setHasFixedSize(true)
-        val sharedPreferences: SharedPreferences = context.getSharedPreferences("sharePref", AppCompatActivity.MODE_PRIVATE)
-        val numberOfColumn:Int = sharedPreferences.getInt("Column",3)
+        val sharedPreferences: SharedPreferences =
+            context.getSharedPreferences("sharePref", AppCompatActivity.MODE_PRIVATE)
+        val numberOfColumn: Int = sharedPreferences.getInt("Column", 3)
         binding.allPhotoRecyclerView.layoutManager = GridLayoutManager(context, numberOfColumn)
         allMediaAdapter = AllMediaAdapter(context, mediaList, "AllPhotos")
         binding.allPhotoRecyclerView.adapter = allMediaAdapter
@@ -60,7 +57,6 @@ class AllMediaFragment : Fragment() {
     private fun getMediaList(): ArrayList<MediaData> {
         val tempMediaList = ArrayList<MediaData>()
 
-        //Querying for images and videos
         val projection = arrayOf(
             MediaStore.Files.FileColumns._ID,
             MediaStore.Files.FileColumns.DATA,
@@ -80,11 +76,7 @@ class AllMediaFragment : Fragment() {
         val queryUri = MediaStore.Files.getContentUri("external")
 
         val cursor = context.contentResolver.query(
-            queryUri,
-            projection,
-            selection,
-            selectionArgs,
-            sortBy
+            queryUri, projection, selection, selectionArgs, sortBy
         )
 
         val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())

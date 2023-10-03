@@ -46,8 +46,7 @@ class AlbumMedia : AppCompatActivity() {
 
     private fun setRecyclerview() {
 
-        val allMediaAdapter =
-            AllMediaAdapter(applicationContext, mediaList, from)
+        val allMediaAdapter = AllMediaAdapter(applicationContext, mediaList, from)
         val sharedPreferences: SharedPreferences =
             getSharedPreferences("sharePref", AppCompatActivity.MODE_PRIVATE)
         val numberOfColumn: Int = sharedPreferences.getInt("Column", 3)
