@@ -109,9 +109,29 @@ class AlbumsFragment : Fragment(), AlbumsAdapter.AlbumClickListener {
                 val folderName = cursor.getString(folderNameColumn)
                 val imageCoverPath = cursor.getString(imageCoverPathColumn)
 
+                val media = AlbumData(folderName, imageCoverPath)
+                val mediaFolderName = File(media.folderName)
+                val mediaImageCover = File(media.coverImage)
+
+//                if (!albumsMap.containsKey(folderName)) {
+//                    if (mediaFolderName.exists() && mediaImageCover.exists()) {
+//                        albumsMap[folderName] = imageCoverPath
+//                    }
+//
+//                }
+
+//
+//                if (mediaFolderName.exists() && mediaImageCover.exists()) {
+//                    if (!albumsMap.containsKey(folderName)) {
+//                        albumsMap[folderName] = imageCoverPath
+//                    }
+//                }
+
+
                 if (!albumsMap.containsKey(folderName)) {
                     albumsMap[folderName] = imageCoverPath
                 }
+
 
             } while (cursor.moveToNext())
             albumsMap.forEach { (folderName, imageCoverPath) ->

@@ -1,6 +1,7 @@
 package com.example.picview
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
@@ -44,9 +45,11 @@ class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Inflate the layout with binding
         drawerLayout = binding.drawerLayout
         actionBarDrawerToggle =
             ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close)
@@ -64,6 +67,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    @SuppressLint("CutPasteId")
     private fun setUpNavItemClick() {
         binding.navView.setNavigationItemSelectedListener {
             when (it.itemId) {
@@ -172,8 +176,7 @@ class MainActivity : AppCompatActivity() {
                             activity.finish()
                             // on below line we are exiting our activity
                             exitProcess(0)
-                        }
-                        .setNegativeButton("No") { dialog, _: Int ->
+                        }.setNegativeButton("No") { dialog, _: Int ->
                             dialog.dismiss()
                         }
                     dialog.show()
@@ -198,8 +201,7 @@ class MainActivity : AppCompatActivity() {
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.READ_EXTERNAL_STORAGE
+                    this, Manifest.permission.READ_EXTERNAL_STORAGE
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
                 permissionsToRequest.add(Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -207,16 +209,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.READ_MEDIA_IMAGES
+                this, Manifest.permission.READ_MEDIA_IMAGES
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             permissionsToRequest.add(Manifest.permission.READ_MEDIA_IMAGES)
         }
 
         if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.READ_MEDIA_VIDEO
+                this, Manifest.permission.READ_MEDIA_VIDEO
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             permissionsToRequest.add(Manifest.permission.READ_MEDIA_VIDEO)
@@ -225,9 +225,7 @@ class MainActivity : AppCompatActivity() {
         //Ask permission which are not granted
         if (permissionsToRequest.isNotEmpty()) {
             ActivityCompat.requestPermissions(
-                this,
-                permissionsToRequest.toTypedArray(),
-                PERMISSION_REQUEST_EXTERNAL_STORAGE
+                this, permissionsToRequest.toTypedArray(), PERMISSION_REQUEST_EXTERNAL_STORAGE
             )
         } else {
             //If granted setup the tabLayout
@@ -238,9 +236,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
