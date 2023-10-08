@@ -1,4 +1,3 @@
 # PicView
 
-Hello 
-Nothing here yet
+Ad free Gallery app for android 
