@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import android.view.WindowManager
 import android.widget.MediaController
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -31,6 +32,12 @@ class FullScreenMedia : AppCompatActivity(), FullScreenMediaAdapter.SideShowButt
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
+
 
         val contentUri = if (intent.data?.scheme.contentEquals("content")) {
             external = true
@@ -131,9 +138,10 @@ class FullScreenMedia : AppCompatActivity(), FullScreenMediaAdapter.SideShowButt
 
         val sharedPreferences: SharedPreferences =
             getSharedPreferences("sharePref", AppCompatActivity.MODE_PRIVATE)
-        val slideshowTimer: Int = sharedPreferences.getInt("slideshowTime", 3)
-
-        val delayMillis = slideshowTimer * 1000.toLong()
+        val slideshowTimer: Float = sharedPreferences.getFloat("slideshowTime", 3F)
+        Toast.makeText(applicationContext, slideshowTimer.toString(), Toast.LENGTH_SHORT).show()
+        val delayMillis = slideshowTimer*1000
+        Toast.makeText(applicationContext, delayMillis.toString(), Toast.LENGTH_SHORT).show()
 
         val runnable = object : Runnable {
             override fun run() {
@@ -143,10 +151,10 @@ class FullScreenMedia : AppCompatActivity(), FullScreenMediaAdapter.SideShowButt
                     currentImagePosition = 0
                 }
                 binding.fullScreenViewPager.setCurrentItem(currentImagePosition, true)
-                slideshowHandler.postDelayed(this, delayMillis)
+                slideshowHandler.postDelayed(this, delayMillis.toLong())
             }
         }
-        slideshowHandler.postDelayed(runnable, delayMillis)
+        slideshowHandler.postDelayed(runnable, delayMillis.toLong())
     }
 
     override fun onSideShowButtonClick(position: Int) {

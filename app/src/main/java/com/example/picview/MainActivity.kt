@@ -149,9 +149,9 @@ class MainActivity : AppCompatActivity() {
                     slideshowEditText.hint = "Enter Time in seconds"
 
                     yesButton.setOnClickListener {
-                        val slideshowTimer: Int = slideshowEditText.text.toString().toInt()
+                        val slideshowTimer: Float = slideshowEditText.text.toString().toFloat()
                         editor.apply {
-                            putInt("slideshowTime", slideshowTimer)
+                            putFloat("slideshowTime", slideshowTimer)
 
                         }.apply()
                         dialog.dismiss()
