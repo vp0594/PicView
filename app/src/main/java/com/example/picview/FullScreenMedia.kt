@@ -34,8 +34,7 @@ class FullScreenMedia : AppCompatActivity(), FullScreenMediaAdapter.SideShowButt
     override fun onCreate(savedInstanceState: Bundle?) {
 
         window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
+            WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
 
 
@@ -139,9 +138,7 @@ class FullScreenMedia : AppCompatActivity(), FullScreenMediaAdapter.SideShowButt
         val sharedPreferences: SharedPreferences =
             getSharedPreferences("sharePref", AppCompatActivity.MODE_PRIVATE)
         val slideshowTimer: Float = sharedPreferences.getFloat("slideshowTime", 3F)
-        Toast.makeText(applicationContext, slideshowTimer.toString(), Toast.LENGTH_SHORT).show()
-        val delayMillis = slideshowTimer*1000
-        Toast.makeText(applicationContext, delayMillis.toString(), Toast.LENGTH_SHORT).show()
+        val delayMillis = slideshowTimer * 1000
 
         val runnable = object : Runnable {
             override fun run() {
