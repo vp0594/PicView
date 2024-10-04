@@ -1,6 +1,7 @@
 package com.example.picview
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.view.GestureDetector
@@ -16,7 +17,8 @@ class FullScreenMediaAdapter(
     private val context: Context,
     private val mediaList: ArrayList<MediaData>,
     private val sideShowClickListener: SideShowButtonClickListener,
-    private val videoActionListener: VideoActionListener
+    private val videoActionListener: VideoActionListener,
+    private val activity: Activity
 ) : RecyclerView.Adapter<FullScreenMediaAdapter.ViewHolder>() {
     class ViewHolder(binding: MediaSliderBinding) : RecyclerView.ViewHolder(binding.root) {
         val image = binding.sliderImageView

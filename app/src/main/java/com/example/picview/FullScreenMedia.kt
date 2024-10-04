@@ -3,6 +3,7 @@ package com.example.picview
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.provider.MediaStore
@@ -10,6 +11,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.MediaController
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.example.picview.databinding.ActivityFullScreenMediaBinding
@@ -35,10 +37,11 @@ class FullScreenMedia : AppCompatActivity(), FullScreenMediaAdapter.SideShowButt
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
-
+        val attrib = window.attributes
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            attrib.layoutInDisplayCutoutMode =
+                WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+        }
 
         val contentUri = if (intent.data?.scheme.contentEquals("content")) {
             external = true
@@ -69,7 +72,8 @@ class FullScreenMedia : AppCompatActivity(), FullScreenMediaAdapter.SideShowButt
         }
 
 
-        fullScreenMediaAdapter = FullScreenMediaAdapter(applicationContext, mediaList, this, this)
+        fullScreenMediaAdapter =
+            FullScreenMediaAdapter(applicationContext, mediaList, this, this, this)
         binding.fullScreenViewPager.adapter = fullScreenMediaAdapter
         currentPosition = intent.getIntExtra("CurrentPosition", 0)
 
@@ -157,13 +161,15 @@ class FullScreenMedia : AppCompatActivity(), FullScreenMediaAdapter.SideShowButt
         var fileName: String? = null
 
         // Query the content resolver to get the file details
-        val projection = arrayOf(MediaStore.Images.Media.DISPLAY_NAME)  // DISPLAY_NAME contains the file name
+        val projection =
+            arrayOf(MediaStore.Images.Media.DISPLAY_NAME)  // DISPLAY_NAME contains the file name
         val cursor = contentResolver.query(uri, projection, null, null, null)
 
         cursor?.use {
             if (it.moveToFirst()) {
                 // Get the file name with extension
-                fileName = it.getString(it.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME))
+                fileName =
+                    it.getString(it.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME))
 
                 // Remove the extension, if any
                 fileName = fileName?.substringBeforeLast(".")
