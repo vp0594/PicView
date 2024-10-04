@@ -19,9 +19,12 @@
         android:theme="@style/Base.Theme.PicView"
         tools:targetApi="33">
         <activity
-            android:name=".About"
-            android:theme="@style/Base.Theme.PicView.Activity"
+            android:name=".ShuffleImages"
             android:exported="false" />
+        <activity
+            android:name=".About"
+            android:exported="false"
+            android:theme="@style/Base.Theme.PicView.Activity" />
         <activity
             android:name=".VideoPlayer"
             android:exported="false" />

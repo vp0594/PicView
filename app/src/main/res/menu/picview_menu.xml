@@ -13,6 +13,12 @@
         android:id="@+id/slideShow"
         android:icon="@drawable/ic_slides_show"
         android:title="@string/slideShowTimer" />
+
+    <item
+        android:id="@+id/shuffle"
+        android:icon="@drawable/ic_shuffle"
+        android:title="@string/shuffle_images" />
+
     <item
         android:id="@+id/about"
         android:icon="@drawable/ic_info"

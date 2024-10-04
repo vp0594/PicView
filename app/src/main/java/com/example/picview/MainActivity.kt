@@ -132,6 +132,8 @@ class MainActivity : AppCompatActivity() {
 
                 }
 
+                R.id.shuffle -> startActivity(Intent(this@MainActivity, ShuffleImages::class.java))
+
                 R.id.slideShow -> {
                     val dialog = Dialog(this)
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)

@@ -39,20 +39,33 @@
         app:layout_constraintStart_toEndOf="@id/shareButton"
         app:layout_constraintTop_toTopOf="parent" />
 
-
-
     <ImageButton
         android:id="@+id/sideShowButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackgroundBorderless"
+        android:contentDescription="@string/favorites"
+        android:minWidth="26dp"
+        android:minHeight="26dp"
+        android:src="@drawable/ic_favorite_border"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/copyName"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@id/favoritesButton"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/copyName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="?selectableItemBackgroundBorderless"
         android:contentDescription="@string/sidesShow"
         android:minWidth="26dp"
         android:minHeight="26dp"
-        android:src="@drawable/ic_slides_show"
+        android:src="?attr/actionModeCopyDrawable"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@id/favoritesButton"
+        app:layout_constraintStart_toEndOf="@id/sideShowButton"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

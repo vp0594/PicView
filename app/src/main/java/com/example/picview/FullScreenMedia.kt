@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.provider.MediaStore
 import android.view.View
 import android.view.WindowManager
 import android.widget.MediaController
@@ -12,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.example.picview.databinding.ActivityFullScreenMediaBinding
+import java.io.File
 import kotlin.system.exitProcess
 
 class FullScreenMedia : AppCompatActivity(), FullScreenMediaAdapter.SideShowButtonClickListener,
@@ -58,11 +60,14 @@ class FullScreenMedia : AppCompatActivity(), FullScreenMediaAdapter.SideShowButt
             mediaList
         } else if (intent.getStringExtra("from") == "AllPhotos") {
             AllMediaFragment.mediaList
+        } else if (intent.getStringExtra("from") == "ShuffledPhotos") {
+            ShuffleImages.mediaList
         } else if (intent.getStringExtra("from") == "Albums") {
             AlbumsFragment.mediaList
         } else {
             dataBase.getFavouritesMediaList()
         }
+
 
         fullScreenMediaAdapter = FullScreenMediaAdapter(applicationContext, mediaList, this, this)
         binding.fullScreenViewPager.adapter = fullScreenMediaAdapter
@@ -115,6 +120,26 @@ class FullScreenMedia : AppCompatActivity(), FullScreenMediaAdapter.SideShowButt
             }
         }
 
+        BottomActionFragment.binding.copyName.setOnClickListener {
+            val currentMedia = mediaList[binding.fullScreenViewPager.currentItem]
+            val fileName = getFileNameFromUri(currentMedia.mediaUri)
+
+            if (fileName != null) {
+                // Copying to clipboard
+                val clipboard =
+                    getSystemService(CLIPBOARD_SERVICE) as android.content.ClipboardManager
+                val clip = android.content.ClipData.newPlainText("Image Name", fileName)
+                clipboard.setPrimaryClip(clip)
+
+                // Inform the user
+                Toast.makeText(
+                    this, "Image name copied to clipboard", Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                Toast.makeText(this, "Failed to retrieve image name", Toast.LENGTH_SHORT).show()
+            }
+        }
+
         BottomActionFragment.binding.shareButton.setOnClickListener {
             val shareIntent = Intent()
             shareIntent.action = Intent.ACTION_SEND
@@ -126,6 +151,26 @@ class FullScreenMedia : AppCompatActivity(), FullScreenMediaAdapter.SideShowButt
         }
 
 
+    }
+
+    private fun getFileNameFromUri(uri: Uri): String? {
+        var fileName: String? = null
+
+        // Query the content resolver to get the file details
+        val projection = arrayOf(MediaStore.Images.Media.DISPLAY_NAME)  // DISPLAY_NAME contains the file name
+        val cursor = contentResolver.query(uri, projection, null, null, null)
+
+        cursor?.use {
+            if (it.moveToFirst()) {
+                // Get the file name with extension
+                fileName = it.getString(it.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME))
+
+                // Remove the extension, if any
+                fileName = fileName?.substringBeforeLast(".")
+            }
+        }
+
+        return fileName
     }
 
     private fun stopSlideshow() {
