@@ -1,3 +1,4 @@
 # PicView
 
-Ad free Gallery app for android 
+Ad free Gallery app for android. 
+Stupidly unoptimized :)
