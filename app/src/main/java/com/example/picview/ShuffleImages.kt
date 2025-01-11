@@ -21,7 +21,9 @@ class ShuffleImages : AppCompatActivity() {
     private lateinit var shuffleMediaList: ArrayList<MediaData>
 
     companion object {
-        val mediaList = ArrayList<MediaData>()
+        var mediaList = ArrayList<MediaData>()
+        var isFromFolderSelection = false
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,8 +48,13 @@ class ShuffleImages : AppCompatActivity() {
     }
 
     override fun onResume() {
-        setUpRecyclerView()
         super.onResume()
+
+        if (isFromFolderSelection) {
+            setUpRecyclerView()
+            isFromFolderSelection = false
+        }
+
     }
 
     private fun setUpRecyclerView() {
@@ -56,6 +63,7 @@ class ShuffleImages : AppCompatActivity() {
         binding.shufflePhotoRecyclerView.layoutManager = GridLayoutManager(context, 3)
         shuffleMediaAdapter = AllMediaAdapter(context, shuffleMediaList, "ShuffledPhotos")
         binding.shufflePhotoRecyclerView.adapter = shuffleMediaAdapter
+        mediaList = shuffleMediaList
     }
 
     private fun getShuffledMediaList(): ArrayList<MediaData> {

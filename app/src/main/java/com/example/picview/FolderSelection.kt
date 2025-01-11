@@ -113,6 +113,11 @@ class FolderSelection : AppCompatActivity() {
     }
 
 
+    override fun onPause() {
+        super.onPause()
+
+        ShuffleImages.isFromFolderSelection=true
+    }
 }
 
 
